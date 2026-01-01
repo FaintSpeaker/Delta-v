@@ -88,10 +88,10 @@ namespace Content.Shared.Preferences
         public int Age { get; set; } = 18;
 
         [DataField]
-        public Sex Sex { get; set; } = Sex.Male;
+        public Sex Sex { get; set; } = Sex.Male; // Delta-V - Make Setter Public
 
         [DataField]
-        public Gender Gender { get; set; } = Gender.Male;
+        public Gender Gender { get; set; } = Gender.Male; // Delta-V - Make Setter Public
 
         /// <summary>
         /// <see cref="Appearance"/>

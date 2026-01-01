@@ -8,7 +8,7 @@
   strategy: !type:ClampedHslColoration
     saturation: [0, 0.1]
     lightness: [0.85, 1]
-  squashAllColors: true
+  squashAllColors: true # Delta-V
 
 - type: skinColoration
   id: VoxFeathers
@@ -20,4 +20,4 @@
 - type: skinColoration
   id: HumanToned
   strategy: !type:HumanTonedSkinColoration {}
-  realisticColors: true
+  realisticColors: true # Delta-V

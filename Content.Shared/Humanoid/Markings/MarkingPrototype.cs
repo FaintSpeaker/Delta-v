@@ -43,7 +43,7 @@ namespace Content.Shared.Humanoid.Markings
         public List<SpriteSpecifier> Sprites { get; private set; } = default!;
 
         [DataField("shader")]
-        public string? Shader { get; private set; } = null;
+        public string? Shader { get; private set; } = null;  // Delta-V - Customizable Markings Shaders
 
         public Marking AsMarking()
         {
@@ -55,6 +55,8 @@ namespace Content.Shared.Humanoid.Markings
         /// </summary>
         /// <remarks>
         /// Default value is 1.
+        ///
+        /// Delta-V - Randomized Markings
         /// </remarks>
         [DataField]
         public float RandomWeight = 1f;

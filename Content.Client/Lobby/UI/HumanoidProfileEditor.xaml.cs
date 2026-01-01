@@ -187,7 +187,7 @@ namespace Content.Client.Lobby.UI
             NameEdit.OnTextChanged += args => { SetName(args.Text); };
             NameEdit.IsValid = args => args.Length <= _maxNameLength;
             NameRandomize.OnPressed += args => RandomizeName();
-            AppearanceRandomize.OnPressed += args => { RandomizeAppearance(); };
+            AppearanceRandomize.OnPressed += args => { RandomizeAppearance(); }; // Delta-V - Randomize Appearance Only 
             RandomizeEverythingButton.OnPressed += args => { RandomizeEverything(); };
             WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
 
@@ -1626,7 +1626,10 @@ namespace Content.Client.Lobby.UI
             SetProfile(Profile, CharacterSlot);
             SetDirty();
         }
-
+        
+        /// <remarks>
+        ///     Delta-V - Randomize Apperaance Functionality
+        /// </remarks>
         private void RandomizeAppearance()
         {
             if (Profile == null)

@@ -1,8 +1,8 @@
 using Content.Server.CharacterAppearance.Components;
 using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Markings; // Delta-V
 using Content.Shared.Preferences;
-using Robust.Shared.Random;
+using Robust.Shared.Random; // Delta-V
 
 namespace Content.Server.Humanoid.Systems;
 
@@ -10,7 +10,7 @@ public sealed class RandomHumanoidAppearanceSystem : EntitySystem
 {
     [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IRobustRandom _random = default!; // Delta-V
 
     public override void Initialize()
     {
@@ -28,6 +28,8 @@ public sealed class RandomHumanoidAppearanceSystem : EntitySystem
         }
 
         var profile = HumanoidCharacterProfile.RandomWithSpecies(humanoid.Species);
+        
+        // Delta-V - Start Randomized Appearance/Markings
         var appearance = profile.Appearance;
 
         List<Marking> markings;
@@ -52,10 +54,11 @@ public sealed class RandomHumanoidAppearanceSystem : EntitySystem
             Name = profile.Name,
             Age = component.Age ?? profile.Age,
             Species = humanoid.Species,
-            Appearance = finalAppearance
-        }
-        .WithSex(component.Sex ?? profile.Sex)
-        .WithGender(component.Gender ?? profile.Gender);
+            Appearance = finalAppearance,
+            Sex = component.Sex ?? profile.Sex,
+            Gender = component.Gender ?? profile.Gender
+        };
+        // Delta-V - End Randomized Appearance/Markings
 
         _humanoid.LoadProfile(uid, finalProfile, humanoid);
 
@@ -63,6 +66,9 @@ public sealed class RandomHumanoidAppearanceSystem : EntitySystem
             _metaData.SetEntityName(uid, profile.Name);
     }
 
+    /// <remarks>
+    ///     Delta-V - Random Markings Functionality
+    /// </remarks>
     private List<Marking> MarkingsToAdd(Dictionary<string, List<Color>> dict)
     {
         List<Marking> output = [];

@@ -24,12 +24,18 @@ public sealed partial class SkinColorationPrototype : IPrototype
     ///     Will also crush randomly generated colors down to the skin's luminosity
     ///     so markings don't appear too bright on darker skin.
     /// </summary>
+    /// <remarks>
+    ///     Delta-V
+    /// </remarks>
     [DataField]
     public bool RealisticColors;
 
     /// <summary>
     ///     If true, will also squash hair and eye colors to the coloration strategy.
     /// </summary>
+    /// <remarks>
+    ///     Delta-V
+    /// </remarks>
     [DataField]
     public bool SquashAllColors;
 }

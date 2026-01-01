@@ -2,7 +2,7 @@
 using System.Numerics;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
-using Content.Shared.Random.Helpers;
+using Content.Shared.Random.Helpers; // Delta-V
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
@@ -128,6 +128,9 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
     {
         var random = IoCManager.Resolve<IRobustRandom>();
         var markingManager = IoCManager.Resolve<MarkingManager>();
+        
+        // Delta-V - Start Randomized Markings/Colors Improvements
+        
         var protoMan = IoCManager.Resolve<IPrototypeManager>();
 
         List<Marking> newMarkings = [];
@@ -280,13 +283,15 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
 
         // at the end of all that, we should have new values for each of these, so we set the character appearance to these new values.
         return new HumanoidCharacterAppearance(newHairStyle, newHairColor, newFacialHairStyle, newHairColor, newEyeColor, newSkinColor, newMarkings);
-
+        
+        // Delta-V - End Randomized Markings/Colors Improvements
         // helper functions:
         float RandomizeColor(float channel)
         {
             return MathHelper.Clamp01(channel + random.Next(-25, 25) / 100f);
         }
 
+        // Delta-V - Start Helper Methods for Generating Colors
         List<Color> GetComplementaryColors(Color color, double angle)
         {
             var hsl = Color.ToHsl(color);
@@ -341,6 +346,7 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             var newColor = new Vector4(toSquashHSL.X, toSquashHSL.Y, skinColorHSL.Z, toSquashHSL.W);
             return Color.FromHsl(newColor);
         }
+        // Delta-V - End Helper Methods for Generating Colors
     }
 
     public static Color ClampColor(Color color)

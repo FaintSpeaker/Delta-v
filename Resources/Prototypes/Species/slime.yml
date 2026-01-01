@@ -34,7 +34,7 @@
     Hair:
       points: 1
       required: false
-      weight: 1
+      weight: 1 # Delta-V
     FacialHair:
       points: 1
       required: false

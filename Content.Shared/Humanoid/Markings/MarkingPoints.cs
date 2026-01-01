@@ -19,6 +19,8 @@ public sealed partial class MarkingPoints
     /// <remarks>
     /// Does one roll for each point- eg. at 2 points with a .6 weight,
     /// you have a 16% chance of no marking, a 48% chance of one marking and a 36% chance of two markings.
+    /// 
+    /// Delta-V - Randomized Markings
     /// </remarks>
     [DataField]
     public float Weight = 0.6f;
@@ -46,8 +48,8 @@ public sealed partial class MarkingPoints
                 Points = points.Points,
                 Required = points.Required,
                 OnlyWhitelisted = points.OnlyWhitelisted,
-                DefaultMarkings = points.DefaultMarkings,
-                Weight = points.Weight
+                DefaultMarkings = points.DefaultMarkings, // Delta-V - Randomized Markings
+                Weight = points.Weight  // Delta-V - Randomized Markings
             };
         }
 
