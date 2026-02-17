@@ -37,3 +37,5 @@
   components:
   - type: AccessReader
     access: [["Atmospherics"], ["Engineering"]]
+  - type: AirAlarm
+    autoMode: false
