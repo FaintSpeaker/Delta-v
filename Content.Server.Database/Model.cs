@@ -442,6 +442,10 @@ namespace Content.Server.Database
         public string EyeColor { get; set; } = null!;
         public string SkinColor { get; set; } = null!;
         public int SpawnPriority { get; set; } = 0;
+        // DeltaV - Begin Additions (Profile Faction)
+        [Column("dv_profile_faction")] 
+        public DVModel.DbCharacterProfileFaction Faction { get; set; } = DVModel.DbCharacterProfileFaction.Crew;
+        // DeltaV - End Additions (Profile Faction)
         public List<Job> Jobs { get; } = new();
         public List<Antag> Antags { get; } = new();
         public List<Trait> Traits { get; } = new();

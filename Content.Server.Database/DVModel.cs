@@ -73,4 +73,13 @@ public static class DVModel
 
         public string AntagName { get; set; } = null!;
     }
+
+    /// <summary>
+    /// This should match CharacterProfileFaction
+    /// </summary>
+    public enum DbCharacterProfileFaction : byte
+    {
+        Crew = 0,
+        Antagonist = 1
+    }
 }

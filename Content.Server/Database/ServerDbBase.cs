@@ -24,6 +24,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Server._CD.Records; // CD - Character Records
 using Content.Shared._CD.Records; // CD - Character Records
+using Content.Shared._DV.Preferences; // DeltaV - Add Profile Faction
 using Content.Shared._DV.Tips; // DV - Tips
 using Content.Shared._DV.Traits; // DV - Traits
 
@@ -371,7 +372,8 @@ namespace Content.Server.Database
                 traits.ToHashSet(),
                 loadouts,
                 profile.CDProfile?.Height ?? 1.0f, // CD - Character Records
-                cdRecords // CD - Character Records
+                cdRecords, // CD - Character Records
+                (CharacterProfileFaction) profile.Faction // DeltaV - Add Profile Faction
             );
         }
 
@@ -401,6 +403,7 @@ namespace Content.Server.Database
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
             profile.Markings = markings;
             profile.Slot = slot;
+            profile.Faction = (DVModel.DbCharacterProfileFaction) humanoid.Faction; // DeltaV - Add Profile Faction
             profile.PreferenceUnavailable = (DbPreferenceUnavailableMode) humanoid.PreferenceUnavailable;
 
             profile.Jobs.Clear();

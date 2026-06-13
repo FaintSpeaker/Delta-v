@@ -1020,6 +1020,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("facial_hair_name");
 
+                    b.Property<byte>("Faction")
+                        .HasColumnType("smallint")
+                        .HasColumnName("dv_profile_faction");
+
                     b.Property<string>("FlavorText")
                         .IsRequired()
                         .HasColumnType("text")

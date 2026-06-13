@@ -1,3 +1,4 @@
+using Content.Shared._DV.Preferences;
 using Content.Shared.Humanoid;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
@@ -10,6 +11,13 @@ namespace Content.Shared.Preferences
         string Name { get; }
 
         ICharacterAppearance CharacterAppearance { get; }
+        
+        // DeltaV - Begin Additions (Profile Faction)
+        /// <summary>
+        ///     The faction the profile is currently assigned to.
+        /// </summary>
+        CharacterProfileFaction Faction { get; }
+        // DeltaV - End Additions (Profile Faction)
 
         bool MemberwiseEquals(ICharacterProfile other);
 

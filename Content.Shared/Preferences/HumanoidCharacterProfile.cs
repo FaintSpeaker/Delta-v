@@ -16,6 +16,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using Content.Shared._CD.Records; // CD - Character Records
+using Content.Shared._DV.Preferences; // DeltaV - Add Profile Faction
 using Content.Shared._DV.Traits; // DeltaV - Traits rework
 using Content.Shared._DV.Species; // DeltaV - Species hiding
 
@@ -100,6 +101,11 @@ namespace Content.Shared.Preferences
         /// </summary>
         public ICharacterAppearance CharacterAppearance => Appearance;
 
+        // DeltaV - Begin Additions (Profile Faction)
+        /// <inheritdoc/>
+        public CharacterProfileFaction Faction { get; set; } = CharacterProfileFaction.Crew;
+        // DeltaV - End Additions (Profile Faction)
+
         /// <summary>
         /// Stores markings, eye colors, etc for the profile.
         /// </summary>
@@ -158,8 +164,9 @@ namespace Content.Shared.Preferences
             Dictionary<string, RoleLoadout> loadouts,
             // Begin CD - Character Records
             float height,
-            PlayerProvidedCharacterRecords? cdCharacterRecords
+            PlayerProvidedCharacterRecords? cdCharacterRecords,
             // End CD - Character Records
+            CharacterProfileFaction faction // DeltaV - Add Profile Faction
         )
         {
             Name = name;
@@ -179,6 +186,7 @@ namespace Content.Shared.Preferences
             Height = height;
             CDCharacterRecords = cdCharacterRecords;
             // End CD - Character Records
+            Faction = faction; // DeltaV - Add Profile Faction
 
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
@@ -211,7 +219,8 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
                 other.Height, // CD - Character Records
-                other.CDCharacterRecords) // CD - Character Records
+                other.CDCharacterRecords, // CD - Character Records
+                other.Faction) // DeltaV - Add Profile Faction
         {
         }
 
