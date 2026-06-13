@@ -6,6 +6,11 @@
   startingGear: PrisonerGear
   alwaysUseSpawner: true
   canBeAntag: false
+  # DeltaV - Begin Additions - Antagonist Character Profiles
+  visibleProfileFactions: 
+  - Crew
+  - Antagonist # Allow for dedicated antagonist profiles to appear as prisoners
+  # DeltaV - End Additions - Antagonist Character Profiles
 #  whitelistRequired: true
   icon: "JobIconPrisoner"
   supervisors: job-supervisors-security

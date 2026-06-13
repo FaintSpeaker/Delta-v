@@ -1,0 +1,9 @@
+﻿- type: antag
+  id: SyndicateReinforcement
+  name: ghost-role-information-syndicate-reinforcement-spy-name
+  objective: ghost-role-information-syndicate-reinforcement-spy-description
+  antagonist: true
+  setPreference: true # Allow to be customized
+  primaryRole: true
+  visibleProfileFactions: 
+  - Antagonist

@@ -141,3 +141,12 @@
   - type: HitmanRole
   - type: RoleBriefing
     briefing: hitman-briefing
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleSyndicateReinforcement
+  name: Syndicate Reinforcement Role
+  components:
+  - type: MindRole
+    roleType: TeamAntagonist
+    antagPrototype: SyndicateReinforcement

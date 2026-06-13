@@ -1,3 +1,4 @@
+using Content.Shared._DV.Preferences;  // DeltaV - Add Profile Faction
 using Content.Shared.Guidebook;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -43,6 +44,20 @@ public sealed partial class AntagPrototype : IPrototype
     /// </summary>
     [DataField("setPreference")]
     public bool SetPreference { get; private set; }
+    
+    // DeltaV - Begin Additions (Profile Factions)
+    /// <summary>
+    ///     When true, this role will appear in the Roles/Jobs tab instead of the Antagonists tab.  
+    /// </summary>
+    [DataField]
+    public bool PrimaryRole { get; set; }
+    
+    /// <summary>
+    ///     Which profile factions should this job show in preferences for?
+    /// </summary>
+    [DataField]
+    public HashSet<CharacterProfileFaction> VisibleProfileFactions { get; set; } = [ CharacterProfileFaction.Crew ];
+    // DeltaV - End Additions (Profile Factions)
 
     /// <summary>
     ///     Requirements that must be met to opt in to this antag role.

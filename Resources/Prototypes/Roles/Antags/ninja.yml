@@ -2,7 +2,12 @@
   id: SpaceNinja
   name: roles-antag-space-ninja-name
   antagonist: true
-  setPreference: false
+  setPreference: true # DeltaV - Allow ninjas to be customized
+  # DeltaV - Begin Additions - Antagonist Character Profiles
+  primaryRole: true
+  visibleProfileFactions:
+  - Antagonist
+  # DeltaV - End Additions - Antagonist Character Profiles
   objective: roles-antag-space-ninja-objective
   requirements:
   - !type:OverallPlaytimeRequirement # DeltaV - Playtime requirement

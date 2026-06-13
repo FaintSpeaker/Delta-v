@@ -3,6 +3,11 @@
   name: roles-antag-mothership-core-name
   antagonist: true
   setPreference: true
+  # DeltaV - Begin Additions - Antagonist Character Profiles
+  primaryRole: true
+  visibleProfileFactions: 
+  - Antagonist
+  # DeltaV - End Additions - Antagonist Character Profiles
   objective: roles-antag-mothership-core-objective
   requirements:
   - !type:RoleTimeRequirement
@@ -15,6 +20,11 @@
   name: roles-antag-xenoborg-name
   antagonist: true
   setPreference: true
+  # DeltaV - Begin Additions - Antagonist Character Profiles
+  primaryRole: true
+  visibleProfileFactions: 
+  - Antagonist
+  # DeltaV - End Additions - Antagonist Character Profiles
   objective: roles-antag-xenoborg-objective
   requirements:
   - !type:RoleTimeRequirement

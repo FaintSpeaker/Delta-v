@@ -1,3 +1,4 @@
+using Content.Shared._DV.Preferences; // DeltaV - Add Profile Faction
 using Content.Shared.Access;
 using Content.Shared.Guidebook;
 using Content.Shared.Players.PlayTimeTracking;
@@ -67,6 +68,14 @@ namespace Content.Shared.Roles
         /// </summary>
         [DataField]
         public bool SetPreference { get; private set; } = true;
+
+        // DeltaV - Begin Additions (Profile Factions)
+        /// <summary>
+        ///     Which profile factions should this job show in preferences for?
+        /// </summary>
+        [DataField]
+        public HashSet<CharacterProfileFaction> VisibleProfileFactions { get; set; } = [ CharacterProfileFaction.Crew ];
+        // DeltaV - End Additions (Profile Factions)
 
         /// <summary>
         ///     Should the selected traits be applied for this job?

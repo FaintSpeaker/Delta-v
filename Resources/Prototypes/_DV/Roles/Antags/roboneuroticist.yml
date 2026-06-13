@@ -3,6 +3,10 @@
   name: roles-antag-roboneuroticist-name
   objective: roles-antag-roboneuroticist-objective
   antagonist: true # making evil borgs
+  setPreference: true # Allow to be customized
+  primaryRole: true
+  visibleProfileFactions: 
+  - Antagonist
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 48h

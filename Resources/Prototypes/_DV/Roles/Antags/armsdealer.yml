@@ -3,6 +3,10 @@
   name: roles-antag-syndicate-armsdealer-name
   objective: roles-antag-syndicate-armsdealer-objective
   antagonist: true # Trading guns for your benefit and watch the chaos commence
+  setPreference: true # Allow to be customized
+  primaryRole: true
+  visibleProfileFactions: 
+  - Antagonist
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 48h

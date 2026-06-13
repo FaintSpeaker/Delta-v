@@ -27,7 +27,7 @@
     description: ghost-role-information-syndicate-reinforcement-spy-description
     rules: ghost-role-information-syndicate-reinforcement-rules
     mindRoles:
-    - MindRoleGhostRoleTeamAntagonist
+    - MindRoleSyndicateReinforcement # DeltaV - Give syndicate reinforcements a custom mind role and antag prototype
     raffle:
       settings: default
   - type: GhostRoleMobSpawner
@@ -46,7 +46,7 @@
     description: ghost-role-information-nukeop-reinforcement-description
     rules: ghost-role-information-nukeop-reinforcement-rules
     mindRoles:
-    - MindRoleGhostRoleTeamAntagonist
+    - MindRoleSyndicateReinforcement # DeltaV - Give syndicate reinforcements a custom mind role and antag prototype
     raffle:
       settings: default
   - type: GhostRoleMobSpawner
