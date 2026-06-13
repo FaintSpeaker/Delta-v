@@ -19,6 +19,7 @@ public sealed partial class RequirementsSelector : BoxContainer
 {
     private readonly RadioOptions<int> _options;
     private readonly StripeBack _lockStripe;
+    private TextureRect? _icon; // DeltaV - Track existing icon
     private List<ProtoId<GuideEntryPrototype>>? _guides;
 
     public event Action<int>? OnSelected;
@@ -45,6 +46,8 @@ public sealed partial class RequirementsSelector : BoxContainer
             OnSelected?.Invoke(args.Id);
         };
 
+        OptionsContainer.AddChild(_options); // DeltaV - move AddChild to the constructor so we can safely run Setup multiple times
+
         var requirementsLabel = new Label()
         {
             Text = Loc.GetString("role-timer-locked"),
@@ -65,6 +68,8 @@ public sealed partial class RequirementsSelector : BoxContainer
             }
         };
 
+        OptionsContainer.AddChild(_lockStripe); // DeltaV - move AddChild to the constructor so we can safely run Setup multiple times
+
         Help.OnPressed += _ =>
         {
             if (_guides != null)
@@ -83,10 +88,14 @@ public sealed partial class RequirementsSelector : BoxContainer
         TextureRect? icon = null,
         List<ProtoId<GuideEntryPrototype>>? guides = null)
     {
+        _options.Clear(); // DeltaV - Clear options when potentially running setup more than once.
+
         foreach (var (text, value) in items)
         {
             _options.AddItem(Loc.GetString(text), value);
         }
+
+        _options.Visible = !_lockStripe.Visible && _options.ItemCount > 0; // DeltaV - Hide options if there are none.
 
         Help.Visible = guides != null;
         _guides = guides;
@@ -97,12 +106,13 @@ public sealed partial class RequirementsSelector : BoxContainer
 
         if (icon != null)
         {
+            // DeltaV - Begin Changes (Track existing icon)
+            if(_icon is not null) RemoveChild(_icon);
+            _icon = icon;
+            // DeltaV - End Changes (Track existing icon)
             AddChild(icon);
             icon.SetPositionFirst();
         }
-
-        OptionsContainer.AddChild(_options);
-        OptionsContainer.AddChild(_lockStripe);
     }
 
     public void LockRequirements(FormattedMessage requirements)
@@ -117,7 +127,7 @@ public sealed partial class RequirementsSelector : BoxContainer
     public void UnlockRequirements()
     {
         _lockStripe.Visible = false;
-        _options.Visible = true;
+        _options.Visible = _options.ItemCount > 0; // DeltaV - Hide options if there are none.
     }
 
     private Button GenerateButton(string text, int value)
