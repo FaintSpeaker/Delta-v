@@ -15,7 +15,7 @@ namespace Content.Server.Database.Migrations.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.6");
 
             modelBuilder.Entity("Content.Server.Database.Admin", b =>
                 {
@@ -665,6 +665,65 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.HasIndex("UserId");
 
                     b.ToTable("connection_log", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.DVModel+PlayerAntag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("dv_player_antags_id");
+
+                    b.Property<string>("AntagName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("antag_name");
+
+                    b.Property<int>("PreferenceId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("preference_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_dv_player_antags");
+
+                    b.HasIndex("PreferenceId", "AntagName")
+                        .IsUnique()
+                        .HasDatabaseName("IX_dv_player_antags_preference_id_antag_name");
+
+                    b.ToTable("dv_player_antags", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.DVModel+PlayerJob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("dv_player_jobs_id");
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("job_name");
+
+                    b.Property<int>("PreferenceId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("preference_id");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("priority");
+
+                    b.HasKey("Id")
+                        .HasName("PK_dv_player_jobs");
+
+                    b.HasIndex("PreferenceId")
+                        .HasDatabaseName("IX_dv_player_jobs_preference_id");
+
+                    b.HasIndex("PreferenceId", "JobName")
+                        .IsUnique()
+                        .HasDatabaseName("IX_dv_player_jobs_preference_id_job_name");
+
+                    b.ToTable("dv_player_jobs", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.DVModel+SeenTip", b =>
@@ -1748,6 +1807,30 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Server");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.DVModel+PlayerAntag", b =>
+                {
+                    b.HasOne("Content.Server.Database.Preference", "Preference")
+                        .WithMany("Antags")
+                        .HasForeignKey("PreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_dv_player_antags_preference_preference_id");
+
+                    b.Navigation("Preference");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.DVModel+PlayerJob", b =>
+                {
+                    b.HasOne("Content.Server.Database.Preference", "Preference")
+                        .WithMany("Jobs")
+                        .HasForeignKey("PreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_dv_player_jobs_preference_preference_id");
+
+                    b.Navigation("Preference");
+                });
+
             modelBuilder.Entity("Content.Server.Database.DVModel+SeenTip", b =>
                 {
                     b.HasOne("Content.Server.Database.Player", null)
@@ -2129,6 +2212,10 @@ namespace Content.Server.Database.Migrations.Sqlite
 
             modelBuilder.Entity("Content.Server.Database.Preference", b =>
                 {
+                    b.Navigation("Antags");
+
+                    b.Navigation("Jobs");
+
                     b.Navigation("Profiles");
                 });
 

@@ -57,6 +57,10 @@ namespace Content.Server.Database
                     .ThenInclude(h => h.CDProfile)
                     .ThenInclude(cd => cd != null ? cd.CharacterRecordEntries : null)
                 // End CD - Character Records
+                // DeltaV - Begin Additions (Preferences-scoped Job Priorities and Antag Selection)
+                .Include(p => p.Jobs)
+                .Include(p => p.Antags)
+                // DeltaV - End Additions (Preferences-scoped Job Priorities and Antag Selection)
                 .Include(p => p.Profiles)
                     .ThenInclude(h => h.Loadouts)
                     .ThenInclude(l => l.Groups)
@@ -78,7 +82,15 @@ namespace Content.Server.Database
             foreach (var favorite in prefs.ConstructionFavorites)
                 constructionFavorites.Add(new ProtoId<ConstructionPrototype>(favorite));
 
-            return new PlayerPreferences(profiles, prefs.SelectedCharacterSlot, Color.FromHex(prefs.AdminOOCColor), constructionFavorites);
+            // DeltaV - Begin Changes to Preferences constructor
+            return new PlayerPreferences(
+                Characters: profiles,
+                SelectedCharacterIndex: prefs.SelectedCharacterSlot,
+                AdminOOCColor: Color.FromHex(prefs.AdminOOCColor),
+                ConstructionFavorites: constructionFavorites,
+                JobPriorities: prefs.Jobs.ToDictionary(j => new ProtoId<JobPrototype>(j.JobName), j => (JobPriority) j.Priority),
+                EnabledAntags: [.. prefs.Antags.Select(a => new ProtoId<AntagPrototype>(a.AntagName))]);
+            // DeltaV - End Changes to Preferences constructor
         }
 
         public async Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index)
@@ -168,7 +180,18 @@ namespace Content.Server.Database
 
             await db.DbContext.SaveChangesAsync();
 
-            return new PlayerPreferences(new[] { new KeyValuePair<int, ICharacterProfile>(0, defaultProfile) }, 0, Color.FromHex(prefs.AdminOOCColor), []);
+            // DeltaV - Begin Changes to Preferences constructor
+            return new PlayerPreferences(
+                Characters: new Dictionary<int, ICharacterProfile>
+                {
+                    { 0, defaultProfile }
+                }, 
+                SelectedCharacterIndex: 0, 
+                AdminOOCColor: Color.FromHex(prefs.AdminOOCColor), 
+                ConstructionFavorites: [],
+                JobPriorities: [],
+                EnabledAntags: []);
+            // DeltaV - End Changes to Preferences constructor
         }
 
         public async Task DeleteSlotAndSetSelectedIndex(NetUserId userId, int deleteSlot, int newSlot)
@@ -206,6 +229,56 @@ namespace Content.Server.Database
 
             await db.DbContext.SaveChangesAsync();
         }
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Job Priorities)
+        /// <summary>
+        ///     Save the specified Job Prototype IDs and priorities as <see cref="DVModel.PlayerJob"/> entities in the user's <see cref="Preference"/> entity.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="jobPriorities"></param>
+        public async Task SavePreferredJobPrioritiesAsync(NetUserId userId, Dictionary<ProtoId<JobPrototype>, JobPriority> jobPriorities)
+        {
+            await using var db = await GetDb();
+            var prefs = await db.DbContext.Preference.SingleAsync(p => p.UserId == userId.UserId);
+
+            prefs.Jobs.Clear();
+
+            prefs.Jobs.AddRange(
+                jobPriorities
+                    .Where(kvp => kvp.Value != JobPriority.Never)
+                    .Select(kvp => new DVModel.PlayerJob
+                    {
+                        JobName = kvp.Key,
+                        Priority = (DbJobPriority) kvp.Value
+                    }));
+
+            await db.DbContext.SaveChangesAsync();
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Job Priorities)
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Antags)
+        /// <summary>
+        ///     Save the specified Antag Prototype IDs as <see cref="DVModel.PlayerAntag"/> entities in the user's <see cref="Preference"/> entity.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="antags"></param>
+        public async Task SavePreferredEnabledAntagsAsync(NetUserId userId, IEnumerable<ProtoId<AntagPrototype>> antags)
+        {
+            await using var db = await GetDb();
+            var prefs = await db.DbContext.Preference.SingleAsync(p => p.UserId == userId.UserId);
+
+            prefs.Antags.Clear();
+
+            prefs.Antags.AddRange(
+                antags
+                    .Select(antag => new DVModel.PlayerAntag
+                    {
+                        AntagName = antag
+                    }));
+
+            await db.DbContext.SaveChangesAsync();
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Antags)
 
         private static async Task SetSelectedCharacterSlotAsync(NetUserId userId, int newSlot, ServerDbContext db)
         {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Content.Shared._DV.Preferences; // DeltaV - Preference Scoped Job Priorities & Antags
 using Content.Shared._DV.Species; // Delta-V Hidden species
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
@@ -46,8 +47,46 @@ namespace Content.Server.Preferences.Managers
             _netManager.RegisterNetMessage<MsgUpdateCharacter>(HandleUpdateCharacterMessage);
             _netManager.RegisterNetMessage<MsgDeleteCharacter>(HandleDeleteCharacterMessage);
             _netManager.RegisterNetMessage<MsgUpdateConstructionFavorites>(HandleUpdateConstructionFavoritesMessage);
+            _netManager.RegisterNetMessage<MsgUpdatePreferredJobPriorities>(HandleUpdatePreferredJobPriorities); // DeltaV - Preference Scoped Job Priorities
+            _netManager.RegisterNetMessage<MsgUpdatePreferredEnabledAntags>(HandleUpdatePreferredEnabledAntags); // DeltaV - Preference Scoped Antags
             _sawmill = _log.GetSawmill("prefs");
         }
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Job Priorities)
+        private async void HandleUpdatePreferredJobPriorities(MsgUpdatePreferredJobPriorities message)
+        {
+            var userId = message.MsgChannel.UserId;
+
+            if (!_cachedPlayerPrefs.TryGetValue(userId, out var prefsData) || !prefsData.PrefsLoaded)
+            {
+                _sawmill.Warning($"User {userId} tried to modify preferences before they loaded.");
+                return;
+            }
+
+            if (ShouldStorePrefs(message.MsgChannel.AuthType))
+            {
+                await _db.SavePreferredJobPrioritiesAsync(userId, message.Priorities);
+            }
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Job Priorities)
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Antags)
+        private async void HandleUpdatePreferredEnabledAntags(MsgUpdatePreferredEnabledAntags message)
+        {
+            var userId = message.MsgChannel.UserId;
+
+            if (!_cachedPlayerPrefs.TryGetValue(userId, out var prefsData) || !prefsData.PrefsLoaded)
+            {
+                _sawmill.Warning($"User {userId} tried to modify preferences before they loaded.");
+                return;
+            }
+
+            if (ShouldStorePrefs(message.MsgChannel.AuthType))
+            {
+                await _db.SavePreferredEnabledAntagsAsync(userId, message.Antags);
+            }
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Antags)
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)
         {
@@ -73,7 +112,12 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
-            prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, index, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            // DeltaV - Begin Changes (Use with syntax for record)
+            prefsData.Prefs = curPrefs with
+            {
+                SelectedCharacterIndex = index
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -113,7 +157,13 @@ namespace Content.Server.Preferences.Managers
                 [slot] = profile
             };
 
-            prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            // DeltaV - Begin Changes (Use with syntax for record)
+            prefsData.Prefs = curPrefs with
+            {
+                Characters = profiles,
+                SelectedCharacterIndex = slot
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             if (ShouldStorePrefs(session.Channel.AuthType))
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
@@ -128,7 +178,13 @@ namespace Content.Server.Preferences.Managers
             }
 
             var curPrefs = prefsData.Prefs!;
-            prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, favorites);
+
+            // DeltaV - Begin Changes (Use with syntax for record)
+            prefsData.Prefs = curPrefs with
+            {
+                ConstructionFavorites = favorites
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             var session = _playerManager.GetSessionById(userId);
             if (ShouldStorePrefs(session.Channel.AuthType))
@@ -172,7 +228,13 @@ namespace Content.Server.Preferences.Managers
             var arr = new Dictionary<int, ICharacterProfile>(curPrefs.Characters);
             arr.Remove(slot);
 
-            prefsData.Prefs = new PlayerPreferences(arr, nextSlot ?? curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            // DeltaV - Begin Changes (Use with syntax for record)
+            prefsData.Prefs = curPrefs with
+            {
+                Characters = arr,
+                SelectedCharacterIndex = nextSlot ?? curPrefs.SelectedCharacterIndex
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -213,7 +275,13 @@ namespace Content.Server.Preferences.Managers
             }
 
             var curPrefs = prefsData.Prefs!;
-            prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, validatedList);
+
+            // DeltaV - Begin Changes (Use with syntax for record)
+            prefsData.Prefs = curPrefs with
+            {
+                ConstructionFavorites = validatedList
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -230,9 +298,18 @@ namespace Content.Server.Preferences.Managers
                 var prefsData = new PlayerPrefData
                 {
                     PrefsLoaded = true,
+                    // DeltaV - Begin Changes to Preferences constructor
                     Prefs = new PlayerPreferences(
-                        new[] { new KeyValuePair<int, ICharacterProfile>(0, HumanoidCharacterProfile.Random()) },
-                        0, Color.Transparent, [])
+                        Characters: new Dictionary<int, ICharacterProfile>
+                        {
+                            { 0, HumanoidCharacterProfile.Random() }
+                        },
+                        SelectedCharacterIndex: 0,
+                        AdminOOCColor: Color.Transparent,
+                        ConstructionFavorites: [], 
+                        JobPriorities: [],
+                        EnabledAntags: [])
+                    // DeltaV - End Changes to Preferences constructor
                 };
 
                 _cachedPlayerPrefs[session.UserId] = prefsData;
@@ -268,20 +345,34 @@ namespace Content.Server.Preferences.Managers
             msg.Preferences = prefsData.Prefs;
             // Start DeltaV - If the selected character is a hidden species, try selecting the NEXT character in the list.
             // If there is no additional characters: Create a new one.
-            while (msg.Preferences.SelectedCharacter is HumanoidCharacterProfile hcp && SpeciesHiderSystem.IsHidden(hcp.Species.Id))
+            if (msg.Preferences.SelectedCharacter is HumanoidCharacterProfile hcp && SpeciesHiderSystem.IsHidden(hcp.Species.Id))
             {
-                // Are we the last character in the list? If so, make a new character.
-                var curId = msg.Preferences.SelectedCharacterIndex;
-                if (curId == msg.Preferences.Characters.Keys.Max())
+                // The selected character is hidden. We still use SelectedCharacter for the humanoid profile editor, so we need to select a different index
+
+                var nextValidPair = msg.Preferences.Characters
+                    .FirstOrDefault(kvp => 
+                           kvp.Key > msg.Preferences.SelectedCharacterIndex 
+                        && kvp.Value is HumanoidCharacterProfile profile 
+                        && !SpeciesHiderSystem.IsHidden(profile.Species.Id));
+
+                if (nextValidPair is {Key: var nextId, Value: not null})
                 {
-                    var newID = curId + 1;
-                    var newCharacter = HumanoidCharacterProfile.Random();
-                    msg.Preferences = new(msg.Preferences.Characters.Append(new(newID, newCharacter)), newID, msg.Preferences.AdminOOCColor, msg.Preferences.ConstructionFavorites);
+                    msg.Preferences = msg.Preferences with
+                    {
+                        SelectedCharacterIndex = nextId
+                    };
                 }
                 else
                 {
-                    var newID = msg.Preferences.Characters.Keys.Where(k => k > curId).Min();
-                    msg.Preferences = new(msg.Preferences.Characters, newID, msg.Preferences.AdminOOCColor, msg.Preferences.ConstructionFavorites);
+                    // No character profile, so create new character.
+                    var newId = msg.Preferences.Characters.Keys.Max() + 1;
+                    var newCharacter = HumanoidCharacterProfile.Random();
+
+                    msg.Preferences = msg.Preferences with
+                    {
+                        Characters = msg.Preferences.Characters.Append(new(newId, newCharacter)).ToDictionary(),
+                        SelectedCharacterIndex = newId
+                    };
                 }
             }
             // End DeltaV
@@ -367,10 +458,12 @@ namespace Content.Server.Preferences.Managers
             // Clean up preferences in case of changes to the game,
             // such as removed jobs still being selected.
 
-            return new PlayerPreferences(prefs.Characters.Select(p =>
+            // DeltaV - Begin Changes (Use with syntax for record)
+            return prefs with
             {
-                return new KeyValuePair<int, ICharacterProfile>(p.Key, p.Value.Validated(session, collection));
-            }), prefs.SelectedCharacterIndex, prefs.AdminOOCColor, prefs.ConstructionFavorites);
+                Characters = prefs.Characters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Validated(session, collection))
+            };
+            // DeltaV - End Changes (Use with syntax for record)
         }
 
         public IEnumerable<KeyValuePair<NetUserId, ICharacterProfile>> GetSelectedProfilesForPlayers(

@@ -1,5 +1,7 @@
+using System.Linq; // DeltaV
 using Content.Shared._DV.Species; // DeltaV - Hidden species
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Roles; // DeltaV - Job Priorities are in PlayerPreferences now
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -12,32 +14,81 @@ namespace Content.Shared.Preferences
     /// </summary>
     [Serializable]
     [NetSerializable]
-    public sealed class PlayerPreferences
+    // DeltaV - Begin Changes (Convert to record for easier syntax, use primary constructor)
+    // I have adjusted PlayerPreferences to be a record class to allow for using the `with` syntax to clean up some other files.
+    public sealed record PlayerPreferences( 
+        Dictionary<int, ICharacterProfile> Characters,
+        int SelectedCharacterIndex,
+        Color AdminOOCColor,
+        List<ProtoId<ConstructionPrototype>> ConstructionFavorites,
+        Dictionary<ProtoId<JobPrototype>, JobPriority> JobPriorities,
+        HashSet<ProtoId<AntagPrototype>> EnabledAntags)
+    // DeltaV - End Changes (Convert to record for easier syntax)
     {
-        private Dictionary<int, ICharacterProfile> _characters;
-
-        public PlayerPreferences(IEnumerable<KeyValuePair<int, ICharacterProfile>> characters, int selectedCharacterIndex, Color adminOOCColor, List<ProtoId<ConstructionPrototype>> constructionFavorites)
-        {
-            _characters = new Dictionary<int, ICharacterProfile>(characters);
-            SelectedCharacterIndex = selectedCharacterIndex;
-            AdminOOCColor = adminOOCColor;
-            ConstructionFavorites = constructionFavorites;
-        }
-
-        /// <summary>
-        ///     All player characters.
-        /// </summary>
-        public IReadOnlyDictionary<int, ICharacterProfile> Characters => _characters;
 
         public ICharacterProfile GetProfile(int index)
         {
-            return _characters[index];
+            return Characters[index]; // DeltaV - Characters is now a property
         }
 
+        // DeltaV - Begin Additions (Add method to get active/usable job prototype ids)
         /// <summary>
-        ///     Index of the currently selected character.
+        ///     Retrieve the filtered set of Job Prototype Ids which are preferred by at least one character.  
         /// </summary>
-        public int SelectedCharacterIndex { get; }
+        /// <returns></returns>
+        public HashSet<ProtoId<JobPrototype>> GetActiveJobs()
+        {
+            HashSet<ProtoId<JobPrototype>> jobs = [];
+
+            foreach (var characterProfile in Characters.Values)
+            {
+                if(characterProfile is not HumanoidCharacterProfile humanoidProfile) 
+                    continue;
+
+                jobs.UnionWith(humanoidProfile.JobPriorities.Where(kvp => kvp.Value != JobPriority.Never).Select(kvp => kvp.Key));
+            }
+
+            return jobs;
+        }
+        // DeltaV - End Additions (Add method to get active/usable job prototype ids)
+
+        // DeltaV - Begin Additions (Add method to get characters that have a preference for a job prototype id)
+        /// <summary>
+        ///     Retrieve the characters which are marked as preferring a particular job.
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
+        public IEnumerable<ICharacterProfile> GetCharactersForJob(ProtoId<JobPrototype> job)
+        {
+            foreach (var profile in Characters.Values)
+            {
+                if(profile is not HumanoidCharacterProfile humanoidProfile) 
+                    continue;
+
+                if(humanoidProfile.JobPriorities.TryGetValue(job, out var priority) && priority != JobPriority.Never)
+                    yield return profile;
+            }
+        }
+        // DeltaV - End Additions (Add method to get characters that have a preference for a job prototype id)
+        
+        // DeltaV - Begin Additions (Add method to get characters that have a preference for an antag prototype id)
+        /// <summary>
+        ///     Retrieve the characters which are marked as preferring a particular antag. 
+        /// </summary>
+        /// <param name="antag"></param>
+        /// <returns></returns>
+        public IEnumerable<ICharacterProfile> GetCharactersForAntag(ProtoId<AntagPrototype> antag)
+        {
+            foreach (var profile in Characters.Values)
+            {
+                if(profile is not HumanoidCharacterProfile humanoidProfile) 
+                    continue;
+
+                if(humanoidProfile.AntagPreferences.Contains(antag))
+                    yield return profile;
+            }
+        }
+        // DeltaV - End Additions (Add method to get characters that have a preference for an antag prototype id)
 
         /// <summary>
         ///     The currently selected character.
@@ -78,7 +129,7 @@ namespace Content.Shared.Preferences
 
         public int IndexOfCharacter(ICharacterProfile profile)
         {
-            return _characters.FirstOrNull(p => p.Value == profile)?.Key ?? -1;
+            return Characters.FirstOrNull(p => p.Value == profile)?.Key ?? -1;
         }
 
         public bool TryIndexOfCharacter(ICharacterProfile profile, out int index)

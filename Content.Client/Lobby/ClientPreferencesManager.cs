@@ -51,7 +51,13 @@ namespace Content.Client.Lobby
 
         public void SelectCharacter(int slot)
         {
-            Preferences = new PlayerPreferences(Preferences.Characters, slot, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
+            // DeltaV - Begin Changes (Use with syntax for record)
+            Preferences = Preferences with
+            {
+                SelectedCharacterIndex = slot
+            };
+            // DeltaV - End Changes (Use with syntax for record)
+            
             var msg = new MsgSelectCharacter
             {
                 SelectedCharacterIndex = slot
@@ -64,7 +70,14 @@ namespace Content.Client.Lobby
             var collection = IoCManager.Instance!;
             profile.EnsureValid(_playerManager.LocalSession!, collection);
             var characters = new Dictionary<int, ICharacterProfile>(Preferences.Characters) {[slot] = profile};
-            Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
+
+            // DeltaV - Begin Changes (Use with syntax for record)
+            Preferences = Preferences with
+            {
+                Characters = characters
+            };
+            // DeltaV - End Changes (Use with syntax for record)
+
             var msg = new MsgUpdateCharacter
             {
                 Profile = profile,
@@ -87,7 +100,13 @@ namespace Content.Client.Lobby
 
             var l = lowest.Value;
             characters.Add(l, profile);
-            Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
+
+            // DeltaV - Begin Changes (Use with syntax for record)
+            Preferences = Preferences with
+            {
+                Characters = characters
+            };
+            // DeltaV - End Changes (Use with syntax for record)
 
             UpdateCharacter(profile, l);
         }
@@ -100,7 +119,14 @@ namespace Content.Client.Lobby
         public void DeleteCharacter(int slot)
         {
             var characters = Preferences.Characters.Where(p => p.Key != slot);
-            Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
+            
+            // DeltaV - Begin Changes (Use with syntax for record)
+            Preferences = Preferences with
+            {
+                Characters = new Dictionary<int, ICharacterProfile>(characters)
+            };
+            // DeltaV - End Changes (Use with syntax for record)
+            
             var msg = new MsgDeleteCharacter
             {
                 Slot = slot
@@ -110,7 +136,12 @@ namespace Content.Client.Lobby
 
         public void UpdateConstructionFavorites(List<ProtoId<ConstructionPrototype>> favorites)
         {
-            Preferences = new PlayerPreferences(Preferences.Characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, favorites);
+            // DeltaV - Begin Changes (Use with syntax for record)
+            Preferences = Preferences with
+            {
+                ConstructionFavorites = favorites
+            };
+            // DeltaV - End Changes (Use with syntax for record)
             var msg = new MsgUpdateConstructionFavorites
             {
                 Favorites = favorites

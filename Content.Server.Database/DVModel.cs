@@ -36,4 +36,41 @@ public static class DVModel
         /// </summary>
         public DateTime DismissedAt { get; set; }
     }
+
+    /// <summary>
+    /// Stores job priorities for player preferences
+    /// </summary>
+    [Table("dv_player_jobs")]
+    [Index(nameof(PreferenceId))]
+    [Index(nameof(PreferenceId), nameof(JobName), IsUnique = true)]
+    public class PlayerJob
+    {
+        public int Id { get; set; }
+        
+        [ForeignKey(nameof(PreferenceId))]
+        public Preference Preference { get; set; } = null!;
+        public int PreferenceId { get; set; }
+
+        public string JobName { get; set; } = null!;
+        public DbJobPriority Priority { get; set; }
+    }
+    
+    /// <summary>
+    /// Stores which antags are enabled as part of a player's preferences.
+    /// </summary>
+    /// <remarks>
+    ///     This is only for certain antagonists, usually round-start antagonists such as Xenoborgs or Nukies.
+    /// </remarks>
+    [Table("dv_player_antags")]
+    [Index(nameof(PreferenceId), nameof(AntagName), IsUnique = true)]
+    public class PlayerAntag
+    {
+        public int Id { get; set; }
+        
+        [ForeignKey(nameof(PreferenceId))]
+        public Preference Preference { get; set; } = null!;
+        public int PreferenceId { get; set; }
+
+        public string AntagName { get; set; } = null!;
+    }
 }

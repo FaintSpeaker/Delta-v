@@ -38,6 +38,12 @@ namespace Content.Server.Database
             ICharacterProfile defaultProfile,
             CancellationToken cancel);
 
+        // DeltaV - Add Db methods to save Preference Scoped Job Priorities
+        Task SavePreferredJobPrioritiesAsync(NetUserId userId, Dictionary<ProtoId<JobPrototype>, JobPriority> jobPriorities);
+
+        // DeltaV - Add Db methods to save Preference Scoped Antags
+        Task SavePreferredEnabledAntagsAsync(NetUserId userId, IEnumerable<ProtoId<AntagPrototype>> enabledAntags);
+
         Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index);
 
         Task SaveCharacterSlotAsync(NetUserId userId, ICharacterProfile? profile, int slot);
@@ -508,6 +514,22 @@ namespace Content.Server.Database
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SaveConstructionFavoritesAsync(userId, constructionFavorites));
         }
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Job Priorities)
+        public Task SavePreferredJobPrioritiesAsync(NetUserId userId, Dictionary<ProtoId<JobPrototype>, JobPriority> jobPriorities)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SavePreferredJobPrioritiesAsync(userId, jobPriorities));
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Job Priorities)
+
+        // DeltaV - Begin Additions (Add Db methods to save Preference Scoped Antags)
+        public Task SavePreferredEnabledAntagsAsync(NetUserId userId, IEnumerable<ProtoId<AntagPrototype>> enabledAntags)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SavePreferredEnabledAntagsAsync(userId, enabledAntags));
+        }
+        // DeltaV - End Additions (Add Db methods to save Preference Scoped Antags)
 
         public Task<PlayerPreferences?> GetPlayerPreferencesAsync(NetUserId userId, CancellationToken cancel)
         {

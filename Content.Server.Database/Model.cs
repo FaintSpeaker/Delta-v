@@ -47,6 +47,8 @@ namespace Content.Server.Database
         public DbSet<BanTemplate> BanTemplate { get; set; } = null!;
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
         public DbSet<DVModel.SeenTip> DVSeenTips { get; set; } = null!; // DeltaV - Tips
+        public DbSet<DVModel.PlayerJob> DVPlayerJobs { get; set; } = null!; // DeltaV - Player Preferences Scoped Job Priorities
+        public DbSet<DVModel.PlayerAntag> DVPlayerAntag { get; set; } = null!; // DeltaV - Player Preferences Scoped Antag Selection
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -418,6 +420,8 @@ namespace Content.Server.Database
         public string AdminOOCColor { get; set; } = null!;
         public List<string> ConstructionFavorites { get; set; } = new();
         public List<Profile> Profiles { get; } = new();
+        public List<DVModel.PlayerJob> Jobs { get; } = new(); // DeltaV - Add Preference Scoped Job Priorities
+        public List<DVModel.PlayerAntag> Antags { get; } = new(); // DeltaV - Add Preference Scoped Enabled Antags 
     }
 
     public class Profile
