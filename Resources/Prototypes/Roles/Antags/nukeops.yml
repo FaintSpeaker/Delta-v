@@ -4,6 +4,7 @@
   antagonist: true
   setPreference: true
   # DeltaV - Begin Additions - Antagonist Character Profiles
+  playerPreference: true
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles
@@ -28,6 +29,7 @@
   antagonist: true
   setPreference: true
   # DeltaV - Begin Additions - Antagonist Character Profiles
+  playerPreference: true
   primaryRole: true
   visibleProfileFactions: 
   - Antagonist
@@ -47,6 +49,7 @@
   antagonist: true
   setPreference: true
   # DeltaV - Begin Additions - Antagonist Character Profiles
+  playerPreference: true
   primaryRole: true
   visibleProfileFactions: 
   - Antagonist

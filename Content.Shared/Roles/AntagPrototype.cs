@@ -1,4 +1,5 @@
 using Content.Shared._DV.Preferences;  // DeltaV - Add Profile Faction
+using Content.Shared.Preferences;  // DeltaV - Add Profile Faction
 using Content.Shared.Guidebook;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -42,12 +43,15 @@ public sealed partial class AntagPrototype : IPrototype
     /// <summary>
     ///     Whether or not the player can set the antag role in antag preferences.
     /// </summary>
+    /// <remarks>
+    ///     DeltaV - This is also used to filter roles in the Jobs tab for <see cref="PrimaryRole"/> roles, and <see cref="PlayerPreferences.EnabledAntags"/> for <see cref="PlayerPreference"/> roles.
+    /// </remarks>
     [DataField("setPreference")]
     public bool SetPreference { get; private set; }
     
     // DeltaV - Begin Additions (Profile Factions)
     /// <summary>
-    ///     When true, this role will appear in the Roles/Jobs tab instead of the Antagonists tab.  
+    ///     When true, this role will only appear in the Roles/Jobs tab instead of the Antagonists tab.  
     /// </summary>
     [DataField]
     public bool PrimaryRole { get; set; }
@@ -58,6 +62,14 @@ public sealed partial class AntagPrototype : IPrototype
     [DataField]
     public HashSet<CharacterProfileFaction> VisibleProfileFactions { get; set; } = [ CharacterProfileFaction.Crew ];
     // DeltaV - End Additions (Profile Factions)
+
+    // DeltaV - Begin Additions (Separate Roundstart Antags from Profiles)
+    /// <summary>
+    ///     When true, this role will appear in <see cref="PlayerPreferences.EnabledAntags"/> instead of <see cref="HumanoidCharacterProfile.AntagPreferences"/>.
+    /// </summary>
+    [DataField]
+    public bool PlayerPreference { get; set; } = true;
+    // DeltaV - End Additions (Separate Roundstart Antags from Profiles)
 
     /// <summary>
     ///     Requirements that must be met to opt in to this antag role.
