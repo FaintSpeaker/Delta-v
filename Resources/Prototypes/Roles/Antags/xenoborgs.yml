@@ -6,6 +6,7 @@
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
   primaryRole: true
+  icon: JobIconXenoborgCore
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles
@@ -24,6 +25,7 @@
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
   primaryRole: true
+  icon: JobIconXenoborg
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles

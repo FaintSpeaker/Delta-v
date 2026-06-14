@@ -78,3 +78,55 @@
     sprite: /Textures/_DV/Interface/Misc/job_icons.rsi
     state: CentcommIntern
   jobName: job-name-centcomintern
+
+# Syndicate
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateRoboticist
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: SyndicateRoboticist
+  jobName: roles-antag-roboneuroticist-name
+    
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateChemist
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: SyndicateChemist
+  jobName: roles-antag-syndicate-synthesis-name
+    
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateRecruiter
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: SyndicateRecruiter
+  jobName: roles-antag-syndicate-recruiter-name
+  
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconArmsDealer
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: ArmsDealer
+  jobName: roles-antag-syndicate-armsdealer-name
+
+# Xenoborgs
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconXenoborg
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: Xenoborg
+  jobName: roles-antag-xenoborg-name
+    
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconXenoborgCore
+  icon:
+    sprite: /Textures/_DV/Interface/Misc/antag_icons.rsi
+    state: XenoborgCore
+  jobName: roles-antag-mothership-core-name

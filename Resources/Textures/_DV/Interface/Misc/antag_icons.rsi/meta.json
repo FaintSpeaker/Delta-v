@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken and modified from https://github.com/DeltaV-Station/Delta-v/tree/310ac0809b2447e2519eb2f96e4685c9e3d53e78/Resources/Textures/Interface/Misc/job_icons.rsi | StationAi recolored to XenoborgCore, Borg recolored to Xenoborg, Chemist recolored to SyndicateChemist, Roboticist recolored to SyndicateRoboticist, HeadOfPersonnel recolored to SyndicateRecruiter by FaintSpeaker (GitHub) | Warden taken and Recolored from https://github.com/DeltaV-Station/Delta-v/tree/310ac0809b2447e2519eb2f96e4685c9e3d53e78/Resources/Textures/_DV/Interface/Misc/job_icons.rsi",
+    "size": {
+        "x": 8,
+        "y": 8
+    },
+    "states": [
+        {
+            "name": "ArmsDealer"
+        },
+        {
+            "name": "Xenoborg"
+        },
+        {
+            "name": "XenoborgCore"
+        },
+        {
+            "name": "SyndicateChemist"
+        },
+        {
+            "name": "SyndicateRecruiter"
+        },
+        {
+            "name": "SyndicateRoboticist"
+        }
+    ]
+}

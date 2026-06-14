@@ -5,6 +5,7 @@
   antagonist: true # making evil borgs
   setPreference: true # Allow to be customized
   primaryRole: true
+  icon: JobIconSyndicateRoboticist
   visibleProfileFactions: 
   - Antagonist
   requirements:

@@ -4,6 +4,7 @@
   antagonist: true
   setPreference: true # Allow to be customized
   primaryRole: true
+  icon: JobIconPrisoner
   visibleProfileFactions: 
   - Antagonist
   objective: roles-antag-fugitive-objective

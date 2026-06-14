@@ -5,6 +5,7 @@
   antagonist: false # you ask questions and write papers not kill people
   setPreference: true # Allow to be customized
   primaryRole: true
+  icon: JobIconSyndicateRecruiter
   visibleProfileFactions: 
   - Antagonist
   requirements:

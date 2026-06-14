@@ -5,6 +5,7 @@
   antagonist: true # Trading guns for your benefit and watch the chaos commence
   setPreference: true # Allow to be customized
   primaryRole: true
+  icon: JobIconArmsDealer
   visibleProfileFactions: 
   - Antagonist
   requirements:

@@ -5,6 +5,7 @@
   antagonist: true # making poisions and shit on demand is evil
   setPreference: true # Allow to be customized
   primaryRole: true
+  icon: JobIconSyndicateChemist
   visibleProfileFactions: 
   - Antagonist
   requirements:

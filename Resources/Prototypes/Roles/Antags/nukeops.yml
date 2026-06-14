@@ -5,6 +5,8 @@
   setPreference: true
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
+  primaryRole: true
+  icon: JobIconSyndicateOperative
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles
@@ -31,6 +33,7 @@
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
   primaryRole: true
+  icon: JobIconSyndicateCorpsman
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles
@@ -51,6 +54,7 @@
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
   primaryRole: true
+  icon: JobIconSyndicateCommander
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles

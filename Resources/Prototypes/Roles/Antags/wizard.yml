@@ -9,10 +9,11 @@
   id: Wizard
   name: roles-antag-wizard-name
   antagonist: true
-  # setPreference: true # Disabled as roundstart gamemode until reworked
+  setPreference: true # Disabled as roundstart gamemode until reworked
   # DeltaV - Begin Additions - Antagonist Character Profiles
   playerPreference: true
   primaryRole: true
+  icon: JobIconWizard
   visibleProfileFactions: 
   - Antagonist
   # DeltaV - End Additions - Antagonist Character Profiles

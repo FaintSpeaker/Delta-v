@@ -1,6 +1,7 @@
 using Content.Shared._DV.Preferences;  // DeltaV - Add Profile Faction
 using Content.Shared.Preferences;  // DeltaV - Add Profile Faction
 using Content.Shared.Guidebook;
+using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -69,6 +70,12 @@ public sealed partial class AntagPrototype : IPrototype
     /// </summary>
     [DataField]
     public bool PlayerPreference { get; set; } = true;
+    
+    /// <summary>
+    ///     The <see cref="JobIconPrototype"/> to display for this antagonist.
+    /// </summary>
+    [DataField]
+    public ProtoId<JobIconPrototype> Icon { get; private set; } = "JobIconUnknown";
     // DeltaV - End Additions (Separate Roundstart Antags from Profiles)
 
     /// <summary>
