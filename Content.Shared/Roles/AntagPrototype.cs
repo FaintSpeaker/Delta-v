@@ -75,7 +75,7 @@ public sealed partial class AntagPrototype : IPrototype
     ///     The <see cref="JobIconPrototype"/> to display for this antagonist.
     /// </summary>
     [DataField]
-    public ProtoId<JobIconPrototype> Icon { get; private set; } = "JobIconUnknown";
+    public ProtoId<JobIconPrototype> Icon { get; private set; }
     // DeltaV - End Additions (Separate Roundstart Antags from Profiles)
 
     /// <summary>
@@ -90,4 +90,49 @@ public sealed partial class AntagPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<ProtoId<GuideEntryPrototype>>? Guides;
+
+    // DeltaV - Begin Additions (Add sorting)
+    /// <summary>
+    ///     The "weight" or importance of this job. If this number is large, the job system will assign this job
+    ///     before assigning other jobs.
+    /// </summary>
+    [DataField]
+    public int Weight { get; private set; }
+
+    /// <summary>
+    /// How to sort this job relative to other jobs in the UI.
+    /// Jobs with a higher value with sort before jobs with a lower value.
+    /// If not set, <see cref="Weight"/> is used as a fallback.
+    /// </summary>
+    [DataField]
+    public int? DisplayWeight { get; private set; }
+
+    public int RealDisplayWeight => DisplayWeight ?? Weight;
+    // DeltaV - End Additions (Add sorting)
 }
+    
+// DeltaV - Begin Additions (Add sorting)
+/// <summary>
+/// Sorts <see cref="AntagPrototype"/>s appropriately for display in the UI,
+/// respecting their <see cref="AntagPrototype.Weight"/>.
+/// </summary>
+public sealed class AntagUIComparer : IComparer<AntagPrototype>
+{
+    public static readonly AntagUIComparer Instance = new();
+
+    public int Compare(AntagPrototype? x, AntagPrototype? y)
+    {
+        if (ReferenceEquals(x, y))
+            return 0;
+        if (ReferenceEquals(null, y))
+            return 1;
+        if (ReferenceEquals(null, x))
+            return -1;
+
+        var cmp = -x.RealDisplayWeight.CompareTo(y.RealDisplayWeight);
+        if (cmp != 0)
+            return cmp;
+        return string.Compare(x.ID, y.ID, StringComparison.Ordinal);
+    }
+}
+// DeltaV - End Additions (Add sorting)

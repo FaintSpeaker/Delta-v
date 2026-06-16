@@ -1,0 +1,59 @@
+﻿- type: antagCategory
+  id: Syndicate
+  name: antag-category-syndicate
+  description: antag-category-syndicate-description
+  color: "#f10303"
+  roles:
+  - SyndicateReinforcement
+  - SyndicateArmsdealer
+  - Recruiter
+  - RoboNeuroticist
+  - SynthesisSpecialist
+  - ListeningPost
+  - Nukeops
+  - NukeopsMedic
+  - NukeopsCommander
+  - Traitor
+  - TraitorSleeper
+
+- type: antagCategory
+  id: Independents
+  name: antag-category-independents
+  description: antag-category-independents-description
+  roles:
+  - Wizard
+  - Asakim
+  - Devil
+  - Conspirator
+  - CosmicAntagCultist
+  - Changeling
+  - Ninja
+  - HeadRev
+  - InitialInfected
+
+- type: antagCategory
+  id: Criminals
+  name: antag-category-criminals
+  description: antag-category-criminals-description
+  color: "#333333"
+  roles:
+  - Fugitive
+  - Hitman
+  - Thief
+
+- type: antagCategory
+  id: Xenoborgs
+  name: antag-category-xenoborgs
+  description: antag-category-xenoborgs-description
+  color: "#2288ff"
+  roles:
+  - Xenoborg
+  - MothershipCore
+
+- type: antagCategory
+  id: NanoTrasen
+  name: antag-category-nanotrasen
+  description: antag-category-nanotrasen-description
+  color: "#2681a5"
+  roles:
+  - NTAgent
