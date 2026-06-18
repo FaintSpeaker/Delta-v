@@ -1,0 +1,43 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              Orientation="Vertical"
+              HorizontalExpand="True"
+              Margin="0 0 0 8"
+              MouseFilter="Stop">
+
+    <!-- Category Header -->
+    <PanelContainer Name="HeaderPanel" StyleClasses="TraitsCategoryHeader">
+        <Button Name="HeaderButton"
+                StyleClasses="TraitsCategoryHeaderButton"
+                HorizontalExpand="True"
+                MouseFilter="Stop">
+            <BoxContainer Orientation="Horizontal" Margin="8 6">
+                <!-- Expand/Collapse Icon -->
+                <Label Name="ExpandIcon"
+                       Text="▼"
+                       StyleClasses="TraitsCategoryExpandIcon"
+                       Margin="0 0 8 0"/>
+
+                <!-- Category Name -->
+                <Label Name="CategoryNameLabel"
+                       StyleClasses="TraitsCategoryNameLabel"/>
+
+                <Control HorizontalExpand="True"/>
+            </BoxContainer>
+        </Button>
+    </PanelContainer>
+
+    <!-- Accent Bar -->
+    <PanelContainer Name="AccentBar"
+                    StyleClasses="TraitsCategoryAccent"
+                    SetHeight="3"
+                    Margin="0 0 0 0"/>
+
+    <!-- Traits Container -->
+    <PanelContainer Name="ContentPanel" StyleClasses="TraitsCategoryContent">
+        <BoxContainer Name="Contents"
+                      Access="Public"
+                      Orientation="Vertical"
+                      HorizontalExpand="True"
+                      Margin="8 8"/>
+    </PanelContainer>
+</BoxContainer>

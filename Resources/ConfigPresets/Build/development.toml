@@ -1,6 +1,6 @@
 ﻿[game]
 # Straight in-game baby
-lobbyenabled = false
+lobbyenabled = true # If I commit this to the PR just gib me
 # Dev map for faster loading & convenience
 map = "Dev"
 role_timers = false

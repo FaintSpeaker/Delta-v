@@ -307,6 +307,20 @@ namespace Content.Shared.Preferences
             };
         }
 
+        /// <summary>
+        /// DeltaV: Return a cloned profile with the specified faction.
+        /// </summary>
+        /// <param name="newFaction"></param>
+        /// <returns></returns>
+        public HumanoidCharacterProfile WithFaction(CharacterProfileFaction newFaction)
+        {
+            // This entire class yearns to be a record struct.
+            return new(this)
+            {
+                Faction = newFaction
+            };
+        }
+
         public HumanoidCharacterProfile WithName(string name)
         {
             return new(this) { Name = name };
@@ -529,6 +543,7 @@ namespace Content.Shared.Preferences
             if (Height != other.Height) return false; // CD
             if (CDCharacterRecords != null && other.CDCharacterRecords != null && // CD
                !CDCharacterRecords.MemberwiseEquals(other.CDCharacterRecords)) return false; // CD
+            if (Faction != other.Faction) return false; // DeltaV - Add profile faction
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 

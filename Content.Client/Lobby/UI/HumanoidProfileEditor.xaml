@@ -4,6 +4,7 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:traits="clr-namespace:Content.Client._DV.Traits.UI"
+         xmlns:roles="clr-namespace:Content.Client._DV.Lobby.UI.Roles"
          HorizontalExpand="True">
         <!-- Left side -->
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
@@ -26,6 +27,8 @@
                                     <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
                                                    VerticalExpand="True" MaxWidth="425"
                                                    HorizontalAlignment="Left" />
+                                    <!-- DeltaV - Profile Faction Selection -->
+                                    <OptionButton Name="ProfileFaction" />
                                 </BoxContainer>
                             </ui:HighlightedContainer>
                         </BoxContainer>
@@ -121,19 +124,23 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
-                <BoxContainer Orientation="Vertical">
-                    <!-- Jobs -->
-                    <OptionButton Name="PreferenceUnavailableButton" />
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="JobList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
-                <BoxContainer Orientation="Vertical" Margin="10">
-                    <!-- Antags -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="AntagList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
+                <!-- DeltaV - Begin Changes (Jobs & Antags Tabs) -->
+                <!-- <BoxContainer Orientation="Vertical"> -->
+                <!--     ~1~ Jobs @1@ -->
+                <!--     <OptionButton Name="PreferenceUnavailableButton" /> -->
+                <!--     <ScrollContainer VerticalExpand="True"> -->
+                <!--         <BoxContainer Name="JobList" Orientation="Vertical" /> -->
+                <!--     </ScrollContainer> -->
+                <!-- </BoxContainer> -->
+                <roles:JobsTab Name="Jobs" Access="Public" />
+                <!-- <BoxContainer Orientation="Vertical" Margin="10"> -->
+                <!--     ~1~ Antags @1@ -->
+                <!--     <ScrollContainer VerticalExpand="True"> -->
+                <!--         <BoxContainer Name="AntagList" Orientation="Vertical" /> -->
+                <!--     </ScrollContainer> -->
+                <!-- </BoxContainer> -->
+                <roles:AntagsTab Name="Antags" Access="Public" />
+                <!-- DeltaV - End Changes (Jobs & Antags Tabs) -->
                 <!-- DV - Traits -->
                 <!-- <BoxContainer Orientation="Vertical" Margin="10"> -->
                 <!--     ~1~ Traits @1@ -->

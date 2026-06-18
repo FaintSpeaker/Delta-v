@@ -41,6 +41,9 @@ using Content.Client._CD.Records.UI;
 using Content.Shared._CD.Records;
 // End CD - Character Records
 using Content.Shared._DV.Traits; // DV - Traits
+using Content.Client._DV.Lobby.UI.Roles; // DeltaV
+using Content.Shared._DV.Preferences; //DeltaV
+using Content.Shared._DV.Roles; // DeltaV - Add Profile Faction
 
 namespace Content.Client.Lobby.UI
 {
@@ -102,7 +105,8 @@ namespace Content.Client.Lobby.UI
 
         private List<(string, RequirementsSelector)> _jobPriorities = new();
 
-        private readonly Dictionary<string, BoxContainer> _jobCategories;
+        // DeltaV - Moved to JobsTab and RolesTab control
+        // private readonly Dictionary<string, BoxContainer> _jobCategories;
 
         private Direction _previewRotation = Direction.North;
 
@@ -185,6 +189,18 @@ namespace Content.Client.Lobby.UI
             Traits.OnTraitsChanged += OnTraitsSelectionChanged; // DeltaV
 
             #region Left
+           
+            // DeltaV - Begin Changes (Add Profile Faction Selection)
+            #region ProfileFaction
+            
+            foreach (var faction in Enum.GetValues<CharacterProfileFaction>())
+            {
+                ProfileFaction.AddItem(Loc.GetString($"character-profile-faction-label-{faction.ToString().ToLowerInvariant()}"), (int) faction);
+            }
+            ProfileFaction.OnItemSelected += args => SetFaction((CharacterProfileFaction) args.Id);
+            
+            #endregion ProfileFaction
+            // DeltaV - End Changes (Add Profile Faction Selection)
 
             #region Name
 
@@ -440,25 +456,38 @@ namespace Content.Client.Lobby.UI
             #region Jobs
 
             TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-jobs-tab"));
+            
+            // TODO: move prefs unavailable.
+            // PreferenceUnavailableButton.AddItem(
+            //     Loc.GetString("humanoid-profile-editor-preference-unavailable-stay-in-lobby-button"),
+            //     (int) PreferenceUnavailableMode.StayInLobby);
+            // PreferenceUnavailableButton.AddItem(
+            //     Loc.GetString("humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button",
+            //                   ("overflowJob", Loc.GetString(SharedGameTicker.FallbackOverflowJobName))),
+            //     (int) PreferenceUnavailableMode.SpawnAsOverflow);
+            //
+            // PreferenceUnavailableButton.OnItemSelected += args =>
+            // {
+            //     PreferenceUnavailableButton.SelectId(args.Id);
+            //     Profile = Profile?.WithPreferenceUnavailable((PreferenceUnavailableMode) args.Id);
+            //     SetDirty();
+            // };
 
-            PreferenceUnavailableButton.AddItem(
-                Loc.GetString("humanoid-profile-editor-preference-unavailable-stay-in-lobby-button"),
-                (int) PreferenceUnavailableMode.StayInLobby);
-            PreferenceUnavailableButton.AddItem(
-                Loc.GetString("humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button",
-                              ("overflowJob", Loc.GetString(SharedGameTicker.FallbackOverflowJobName))),
-                (int) PreferenceUnavailableMode.SpawnAsOverflow);
-
-            PreferenceUnavailableButton.OnItemSelected += args =>
-            {
-                PreferenceUnavailableButton.SelectId(args.Id);
-                Profile = Profile?.WithPreferenceUnavailable((PreferenceUnavailableMode) args.Id);
-                SetDirty();
-            };
-
-            _jobCategories = new Dictionary<string, BoxContainer>();
+            // DeltaV - Add Dedicated Antags Tab Control
+            // _jobCategories = new Dictionary<string, BoxContainer>(); 
+            
+            // DeltaV - Add Antags Tab
+            Antags.GuidebooksOpened += OnOpenGuidebook;
+            Antags.LoadoutOpened += AntagsOnLoadoutOpened;
+            Antags.RoleToggled += AntagsOnRoleToggled;
 
             RefreshAntags();
+            
+            // DeltaV - Add Dedicated Jobs Tab Control
+            Jobs.GuidebooksOpened += OnOpenGuidebook;
+            Jobs.LoadoutOpened += JobsOnLoadoutOpened;
+            Jobs.RoleToggled += JobsOnRoleToggled;
+            
             RefreshJobs();
 
             #endregion Jobs
@@ -516,6 +545,69 @@ namespace Content.Client.Lobby.UI
 
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
+        }
+        
+        /// <summary>
+        /// DeltaV: Handle the "Loadout" button for the <see cref="Antags"/> tab.
+        /// </summary>
+        private void AntagsOnLoadoutOpened(RoleTab<AntagCategoryPrototype, AntagPrototype>.LoadoutOpeningEventArgs args)
+        {
+            var antag = args.Prototype;
+            var roleLoadoutProto = args.Loadout;
+            RoleLoadout? loadout = null;
+
+            // Clone so we don't modify the underlying loadout.
+            Profile?.Loadouts.TryGetValue(roleLoadoutProto.ID, out loadout);
+            loadout = loadout?.Clone();
+
+            if (loadout == null)
+            {
+                loadout = new RoleLoadout(roleLoadoutProto.ID);
+                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+            }
+
+            // TODO: Antag loadout 
+            OpenLoadout(null, loadout, roleLoadoutProto);
+        }
+
+        /// <summary>
+        /// DeltaV: Handle the toggled event for the <see cref="Antags"/> tab.
+        /// </summary>
+        private void AntagsOnRoleToggled(RoleTab<AntagCategoryPrototype, AntagPrototype>.RoleToggledEventArgs args)
+        {
+            Profile = Profile?.WithAntagPreference(args.Prototype, args.Active);
+            SetDirty();
+        }
+        
+        /// <summary>
+        /// DeltaV: Handle the "Loadout" button for the <see cref="Jobs"/> tab.
+        /// </summary>
+        private void JobsOnLoadoutOpened(RoleTab<DepartmentPrototype, JobPrototype>.LoadoutOpeningEventArgs args)
+        {
+            var job = args.Prototype;
+            var roleLoadoutProto = args.Loadout;
+            RoleLoadout? loadout = null;
+
+            // Clone so we don't modify the underlying loadout.
+            Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out loadout);
+            loadout = loadout?.Clone();
+
+            if (loadout == null)
+            {
+                loadout = new RoleLoadout(roleLoadoutProto.ID);
+                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+            }
+
+            OpenLoadout(job, loadout, roleLoadoutProto);
+        }
+
+        /// <summary>
+        /// DeltaV: Handle the toggled event for the <see cref="Jobs"/> tab.
+        /// </summary>
+        private void JobsOnRoleToggled(RoleTab<DepartmentPrototype, JobPrototype>.RoleToggledEventArgs args)
+        {
+            Profile = Profile?.WithJobPriority(args.Prototype, args.Active ? JobPriority.Medium : JobPriority.Never); // TODO: change this to hashset.
+            SetDirty();
         }
 
         // Begin DeltaV - Traits Integration
@@ -756,6 +848,13 @@ namespace Content.Client.Lobby.UI
 
         public void RefreshAntags()
         {
+            // DeltaV - Begin Changes (Move antags to a dedicated control)
+            Antags.Profile = Profile;
+            Antags.Refresh();
+            RefreshLoadouts();
+
+            // Original code below.
+            /*
             AntagList.RemoveAllChildren();
             var items = new[]
             {
@@ -816,6 +915,7 @@ namespace Content.Client.Lobby.UI
 
                 AntagList.AddChild(antagContainer);
             }
+            // DeltaV - End Changes (Move antags to a dedicated control) */
         }
 
         private void SetDirty()
@@ -881,6 +981,7 @@ namespace Content.Client.Lobby.UI
             IsDirty = false;
             JobOverride = null;
 
+            UpdateFaction(); // DeltaV - Add profile factions
             UpdateNameEdit();
             UpdateFlavorTextEdit();
             UpdateSexControls();
@@ -912,7 +1013,8 @@ namespace Content.Client.Lobby.UI
 
             if (Profile != null)
             {
-                PreferenceUnavailableButton.SelectId((int) Profile.PreferenceUnavailable);
+                // TODO: Preferences...
+                //PreferenceUnavailableButton.SelectId((int) Profile.PreferenceUnavailable);
             }
         }
 
@@ -957,6 +1059,13 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshJobs()
         {
+            // DeltaV - Begin Changes (Move jobs to a dedicated control)
+            Jobs.Profile = Profile;
+            Jobs.Refresh();
+            RefreshLoadouts();
+            
+            // Original code below.
+            /*
             JobList.RemoveAllChildren();
             _jobCategories.Clear();
             _jobPriorities.Clear();
@@ -1137,6 +1246,7 @@ namespace Content.Client.Lobby.UI
             }
 
             UpdateJobPriorities();
+            // DeltaV - End Changes (Move jobs to a dedicated control) */
         }
 
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
@@ -1298,6 +1408,20 @@ namespace Content.Client.Lobby.UI
             PreviewDummy = EntityUid.Invalid;
         }
 
+        /// <summary>
+        /// DeltaV: Set the viewed profile's faction to the specified value.
+        /// </summary>
+        /// <param name="newFaction">The faction to set the profile to.</param>
+        private void SetFaction(CharacterProfileFaction newFaction)
+        {
+            Profile = Profile?.WithFaction(newFaction);
+            UpdateFaction();
+            RefreshJobs();
+            RefreshAntags();
+            ReloadPreview();
+            SetDirty();
+        }
+        
         private void SetAge(int newAge)
         {
             Profile = Profile?.WithAge(newAge);
@@ -1387,6 +1511,14 @@ namespace Content.Client.Lobby.UI
                 _isDirty = value;
                 UpdateSaveButton();
             }
+        }
+
+        /// <summary>
+        /// DeltaV: Update the <see cref="ProfileFaction"/> control's selected value based on the player's <see cref="Profile"/>.
+        /// </summary>
+        private void UpdateFaction()
+        {
+            ProfileFaction.SelectId((int)(Profile?.Faction ?? CharacterProfileFaction.Crew));
         }
 
         private void UpdateNameEdit()

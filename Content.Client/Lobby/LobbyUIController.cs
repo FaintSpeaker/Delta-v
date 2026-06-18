@@ -100,16 +100,18 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
     {
         if (_profileEditor != null)
         {
-            if (obj.WasModified<AntagPrototype>())
-            {
-                _profileEditor.RefreshAntags();
-            }
-
-            if (obj.WasModified<JobPrototype>() ||
-                obj.WasModified<DepartmentPrototype>())
-            {
-                _profileEditor.RefreshJobs();
-            }
+            // DeltaV - Begin Subtractions (Prototypes Reloaded are handled by AntagsTab and JobsTab)
+            // if (obj.WasModified<AntagPrototype>())
+            // {
+            //     _profileEditor.RefreshAntags();
+            // }
+            //
+            // if (obj.WasModified<JobPrototype>() ||
+            //     obj.WasModified<DepartmentPrototype>())
+            // {
+            //     _profileEditor.RefreshJobs();
+            // }
+            // DeltaV - End Subtractions (Prototypes Reloaded are handled by AntagsTab and JobsTab)
 
             if (obj.WasModified<LoadoutPrototype>() ||
                 obj.WasModified<LoadoutGroupPrototype>() ||

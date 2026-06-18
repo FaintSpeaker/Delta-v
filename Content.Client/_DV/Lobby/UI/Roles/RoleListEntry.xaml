@@ -1,0 +1,65 @@
+﻿<dvRoles:RoleListEntry
+    xmlns="https://spacestation14.io"
+    xmlns:dvRoles="clr-namespace:Content.Client._DV.Lobby.UI.Roles"
+    MouseFilter="Stop"
+    StyleClasses="TraitsEntryPanel"
+    
+    HorizontalExpand="True"
+    VerticalAlignment="Center"
+    Margin="0 0 0 4">
+    
+    <BoxContainer Name="Contents" 
+                  Orientation="Horizontal"
+                  HorizontalExpand="True"
+                  VerticalAlignment="Center"
+                  Margin="3 0">
+        
+        <!-- Toggle Container -->
+        <BoxContainer Name="ToggleContainer"
+                      Orientation="Horizontal"
+                      VerticalAlignment="Center"
+                      Margin="8 0 0 0"
+                      SetWidth="24">
+
+            <!-- Checkbox -->
+            <CheckBox Name="RoleCheckbox"
+                      StyleClasses="TraitsEntryCheckbox"
+                      VerticalAlignment="Center"/>
+
+            <!-- Lock Icon -->
+            <TextureRect Name="LockIcon"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                         SetSize="20 20"
+                         Stretch="KeepAspectCentered"
+                         TexturePath="/Textures/Interface/VerbIcons/lock.svg.192dpi.png"
+                         Visible="False"/>
+        </BoxContainer>
+        
+        <!-- Role Icon -->
+        <TextureRect Name="Icon"
+                     SetWidth="18"
+                     Stretch="KeepAspectCentered"
+                     Margin="8 0 0 0"/>
+        
+        <!-- Role Name -->
+        <Label Name="RoleName" 
+               Margin="8 0 0 0"/>
+        
+        <!-- Guidebook -->
+        <Control SetSize="21 21">
+            <TextureButton Name="GuidebookButton" StyleClasses="HelpButton"/>
+        </Control>
+        
+        <!-- Spacer -->
+        <Control HorizontalExpand="True" />
+        
+        <!-- Loadout Button -->
+        <Button Name="LoadoutButton"
+                Text="{Loc 'loadout-window'}"
+                Margin="0 3 8 3"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right" />
+    </BoxContainer>
+    
+</dvRoles:RoleListEntry>

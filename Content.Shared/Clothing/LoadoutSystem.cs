@@ -40,6 +40,16 @@ public sealed class LoadoutSystem : EntitySystem
         return "Job" + loadout;
     }
 
+    /// <summary>
+    /// DeltaV: Static method to get the ProtoID for a given Antag's Role Loadout Prototype.
+    /// </summary>
+    /// <param name="antag"></param>
+    /// <returns></returns>
+    public static ProtoId<RoleLoadoutPrototype> GetAntagLoadoutPrototype(AntagPrototype antag)
+    {
+        return "Antag" + antag.ID;
+    }
+
     public EntProtoId? GetFirstOrNull(LoadoutPrototype loadout)
     {
         EntProtoId? proto = null;
