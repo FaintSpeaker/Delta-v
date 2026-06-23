@@ -446,6 +446,12 @@ namespace Content.Server.Database
         [Column("dv_profile_faction")] 
         public DVModel.DbCharacterProfileFaction Faction { get; set; } = DVModel.DbCharacterProfileFaction.Crew;
         // DeltaV - End Additions (Profile Faction)
+
+        /// <summary>
+        /// DeltaV: Allow profile toggling.
+        /// </summary>
+        [Column("dv_profile_enabled")]
+        public bool Enabled { get; set; } = true;
         public List<Job> Jobs { get; } = new();
         public List<Antag> Antags { get; } = new();
         public List<Trait> Traits { get; } = new();

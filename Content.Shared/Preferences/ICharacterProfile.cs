@@ -18,6 +18,11 @@ namespace Content.Shared.Preferences
         /// </summary>
         CharacterProfileFaction Faction { get; }
         // DeltaV - End Additions (Profile Faction)
+        
+        /// <summary>
+        /// DeltaV: Whether the user has enabled the profile.
+        /// </summary>
+        bool Enabled { get; set; }
 
         bool MemberwiseEquals(ICharacterProfile other);
 

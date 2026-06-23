@@ -105,6 +105,11 @@ namespace Content.Shared.Preferences
         /// <inheritdoc/>
         public CharacterProfileFaction Faction { get; set; } = CharacterProfileFaction.Crew;
         // DeltaV - End Additions (Profile Faction)
+        
+        /// <summary>
+        /// DeltaV: Whether the user has enabled the profile.
+        /// </summary>
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// Stores markings, eye colors, etc for the profile.
@@ -166,7 +171,8 @@ namespace Content.Shared.Preferences
             float height,
             PlayerProvidedCharacterRecords? cdCharacterRecords,
             // End CD - Character Records
-            CharacterProfileFaction faction // DeltaV - Add Profile Faction
+            CharacterProfileFaction faction, // DeltaV - Add Profile Faction
+            bool enabled // DeltaV - Allow profile toggling
         )
         {
             Name = name;
@@ -187,6 +193,7 @@ namespace Content.Shared.Preferences
             CDCharacterRecords = cdCharacterRecords;
             // End CD - Character Records
             Faction = faction; // DeltaV - Add Profile Faction
+            Enabled = enabled; // DeltaV - Allow profile toggling
 
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
@@ -220,7 +227,8 @@ namespace Content.Shared.Preferences
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
                 other.Height, // CD - Character Records
                 other.CDCharacterRecords, // CD - Character Records
-                other.Faction) // DeltaV - Add Profile Faction
+                other.Faction, // DeltaV - Add Profile Faction
+                other.Enabled) // DeltaV - Allow profile toggling
         {
         }
 
@@ -318,6 +326,19 @@ namespace Content.Shared.Preferences
             return new(this)
             {
                 Faction = newFaction
+            };
+        }
+
+        /// <summary>
+        /// DeltaV: Return a cloned profile with the specified enabled status.
+        /// </summary>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
+        public HumanoidCharacterProfile WithEnabled(bool enabled)
+        {
+            return new(this)
+            {
+                Enabled = enabled
             };
         }
 
@@ -544,6 +565,7 @@ namespace Content.Shared.Preferences
             if (CDCharacterRecords != null && other.CDCharacterRecords != null && // CD
                !CDCharacterRecords.MemberwiseEquals(other.CDCharacterRecords)) return false; // CD
             if (Faction != other.Faction) return false; // DeltaV - Add profile faction
+            if (Enabled != other.Enabled) return false; // DeltaV - Allow profile toggling
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 

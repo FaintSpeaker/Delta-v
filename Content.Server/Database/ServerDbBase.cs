@@ -373,7 +373,8 @@ namespace Content.Server.Database
                 loadouts,
                 profile.CDProfile?.Height ?? 1.0f, // CD - Character Records
                 cdRecords, // CD - Character Records
-                (CharacterProfileFaction) profile.Faction // DeltaV - Add Profile Faction
+                (CharacterProfileFaction) profile.Faction, // DeltaV - Add Profile Faction
+                profile.Enabled // DeltaV - Allow profile toggling.
             );
         }
 
@@ -404,6 +405,7 @@ namespace Content.Server.Database
             profile.Markings = markings;
             profile.Slot = slot;
             profile.Faction = (DVModel.DbCharacterProfileFaction) humanoid.Faction; // DeltaV - Add Profile Faction
+            profile.Enabled = humanoid.Enabled; // DeltaV - Allow profile toggling.
             profile.PreferenceUnavailable = (DbPreferenceUnavailableMode) humanoid.PreferenceUnavailable;
 
             profile.Jobs.Clear();
