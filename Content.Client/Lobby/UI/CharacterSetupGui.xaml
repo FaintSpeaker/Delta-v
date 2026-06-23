@@ -5,7 +5,8 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          VerticalExpand="True">
     <Control>
-        <PanelContainer Name="BackgroundPanel" />
+        <!-- DeltaV: Change the background to use StyleClasses -->
+        <PanelContainer Name="BackgroundPanel" StyleClasses="BackgroundPanelOpenLeft" />
         <BoxContainer Orientation="Vertical" SeparationOverride="0">
             <BoxContainer Orientation="Horizontal" MinSize="0 40">
                 <Label Text="{Loc 'character-setup-gui-character-setup-label'}"
@@ -30,14 +31,47 @@
             </BoxContainer>
             <PanelContainer StyleClasses="highlight">
             </PanelContainer>
-            <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="0">
-                <ScrollContainer MinSize="325 0" Margin="5 5 0 0">
-                    <BoxContainer Name="Characters" Orientation="Vertical" />
-                </ScrollContainer>
-                <PanelContainer MinSize="2 0" StyleClasses="highlight">
-                </PanelContainer>
-                <BoxContainer Name="CharEditor" HorizontalExpand="True" />
-            </BoxContainer>
+            <!-- DeltaV - Begin Changes (Make the character list into a collapsible menu) -->
+            <Control HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalExpand="True" VerticalExpand="True">
+                <!-- <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="0"> -->
+                    <!-- <ScrollContainer MinSize="325 0" Margin="5 5 0 0"> -->
+                    <!--     <BoxContainer Name="Characters" Orientation="Vertical" /> -->
+                    <!-- </ScrollContainer> -->
+                <!-- </BoxContainer> -->
+                <BoxContainer Name="CharEditor" HorizontalExpand="True">
+                    <!-- Spacer roughly the right size to keep the character editor from sliding under the flyout button. -->
+                    <Control SetWidth="30" /> 
+                </BoxContainer>
+                <Control HorizontalExpand="True" VerticalExpand="True">
+                    <!-- Dimming overlay -->
+                    <PanelContainer Name="CharacterListDimOverlay" 
+                                    StyleClasses="BackgroundPanelOpenLeft" 
+                                    Modulate="#FFFFFFAA" 
+                                    MouseFilter="Stop"
+                                    Visible="False"/>
+                    <!-- Collapsible menu -->
+                    <BoxContainer Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">
+                        <Control RectClipContent="True">
+                            <!-- Menu background -->
+                            <PanelContainer StyleClasses="BackgroundPanelOpenLeft" />
+
+                            <BoxContainer Orientation="Horizontal">
+                                <!-- Character list -->
+                                <ScrollContainer Name="CharacterListContainer" Visible="False" MinSize="325 0" Margin="5 5 0 0">
+                                    <BoxContainer Name="Characters" Orientation="Vertical" />
+                                </ScrollContainer>
+                                
+                                <!-- Menu button -->
+                                <Button Name="ToggleCharacterListButton" StyleClasses="OpenLeft" Text="«" TextAlign="Center" SetWidth="30" />
+                            </BoxContainer>
+                        </Control>
+                        
+                        <!-- Spacer --> 
+                        <PanelContainer HorizontalAlignment="Stretch" />
+                    </BoxContainer>
+                </Control>
+            </Control>
+            <!-- DeltaV - End Changes (Make the character list into a collapsible menu) -->
         </BoxContainer>
     </Control>
 </Control>

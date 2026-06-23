@@ -29,6 +29,8 @@ namespace Content.Client.Lobby.UI
 
         private readonly Button _createNewCharacterButton;
 
+        private bool _characterListVisible; // DeltaV
+
         public event Action<int>? SelectCharacter;
         public event Action<int>? DeleteCharacter;
 
@@ -37,15 +39,17 @@ namespace Content.Client.Lobby.UI
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
-            var panelTex = _resourceCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
-            var back = new StyleBoxTexture
-            {
-                Texture = panelTex,
-                Modulate = new Color(37, 37, 42)
-            };
-            back.SetPatchMargin(StyleBox.Margin.All, 10);
-
-            BackgroundPanel.PanelOverride = back;
+            // DeltaV - Begin Changes (Changed BackgroundPanel to use StyleClasses instead) 
+            // var panelTex = _resourceCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
+            // var back = new StyleBoxTexture
+            // {
+            //     Texture = panelTex,
+            //     Modulate = new Color(37, 37, 42)
+            // };
+            // back.SetPatchMargin(StyleBox.Margin.All, 10);
+            //
+            // BackgroundPanel.PanelOverride = back;
+            // DeltaV - End Changes (Changed BackgroundPanel to use StyleClasses instead)
 
             _createNewCharacterButton = new Button
             {
@@ -65,6 +69,9 @@ namespace Content.Client.Lobby.UI
             StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
 
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, p => AdminRemarksButton.Visible = p, true);
+
+            // DeltaV: Add collapsible character list
+            ToggleCharacterListButton.OnPressed += _ => ToggleCollapsibleCharacterList();
         }
 
         /// <summary>
@@ -107,6 +114,7 @@ namespace Content.Client.Lobby.UI
                 characterPickerButton.OnPressed += args =>
                 {
                     SelectCharacter?.Invoke(slot);
+                    ToggleCollapsibleCharacterList(); // DeltaV - collapse character list when one is chosen.
                 };
 
                 characterPickerButton.OnDeletePressed += () =>
@@ -117,6 +125,17 @@ namespace Content.Client.Lobby.UI
 
             _createNewCharacterButton.Disabled = numberOfFullSlots >= _preferencesManager.Settings.MaxCharacterSlots;
             Characters.AddChild(_createNewCharacterButton);
+        }
+        
+        /// <summary>
+        ///     DeltaV: Toggle the new collapsible character menu.
+        /// </summary>
+        public void ToggleCollapsibleCharacterList()
+        {
+            _characterListVisible = !_characterListVisible;
+            CharacterListContainer.Visible = _characterListVisible;
+            CharacterListDimOverlay.Visible = _characterListVisible;
+            ToggleCharacterListButton.Text = _characterListVisible ? "«" : "»";
         }
     }
 }
