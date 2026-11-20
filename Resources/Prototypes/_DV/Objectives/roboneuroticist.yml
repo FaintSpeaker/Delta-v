@@ -53,7 +53,7 @@
     - !type:TargetObjectiveMindFilter
       blacklist:
         components:
-        - TargetObjectiveImmune
+        - Unborgable # It would not make sense to condemn someone to metal who cannot be borged
   - type: KillPersonCondition
     requireDead: true
 

@@ -7,6 +7,8 @@
   - LightReplacer
   - Skimmer
   - RadioHandheld
+  - BarberScissors
+  - Ashtray
 
 - type: latheRecipePack
   id: ServiceBoardsStaticDeltaV

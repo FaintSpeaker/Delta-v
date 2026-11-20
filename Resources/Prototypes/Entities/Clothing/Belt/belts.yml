@@ -82,6 +82,7 @@
     whitelist:
       tags:
         - ShellShotgun
+        - CartridgeMagnum
   # End Delta V Changes
 
 - type: entity
@@ -154,13 +155,20 @@
     sprite: _DV/Clothing/Belt/securitywebbing.rsi # DeltaV - resprite
   - type: Clothing
     sprite: _DV/Clothing/Belt/securitywebbing.rsi # DeltaV - resprite
-  - type: ItemSlots # DeltaV - add sidearm slot
+  - type: ItemSlots # DeltaV - add sidearm and radio slot
     slots:
       holster:
         name: clothing-belt-sidearm
+        priority: 1 # DeltaV - Prioritize ejecting the side-arm over the radio
         whitelist:
           tags:
           - Sidearm
+        insertOnInteract: false
+      radio:
+        name: clothing-belt-radio
+        whitelist:
+          tags:
+          - Radio
         insertOnInteract: false
   - type: Storage # DeltaV - Split Inventory
     grid:
@@ -178,6 +186,7 @@
       storagebase: !type:Container
         ents: []
       holster: !type:ContainerSlot {}
+      radio: !type:ContainerSlot {} # DeltaV - add radio holster
   - type: Appearance # DeltaV
 
 - type: entity
@@ -239,3 +248,14 @@
     sprite: Clothing/Belt/militarywebbingmed.rsi
   - type: Clothing
     sprite: Clothing/Belt/militarywebbingmed.rsi
+
+- type: entity
+  parent: ClothingBeltMilitaryWebbing
+  id: ClothingBeltMilitaryWebbingERT
+  name: ERT chest rig
+  description: A set of tactical webbing worn by Emergency Response Team operatives.
+  components:
+  - type: Sprite
+    sprite: Clothing/Belt/militarywebbingert.rsi
+  - type: Clothing
+    sprite: Clothing/Belt/militarywebbingert.rsi

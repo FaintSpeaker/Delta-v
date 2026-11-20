@@ -5,8 +5,6 @@
   name: arcade
   parent: BaseComputer
   components:
-  - type: ApcPowerReceiver
-    powerLoad: 350
   - type: ExtensionCableReceiver
   - type: PointLight
     radius: 1.8
@@ -88,7 +86,7 @@
     - FoamBlade
     - FoamCutlass
     - Football
-    - GlowstickBase #green
+    - GlowstickGreen
     - GlowstickBlue
     - GlowstickYellow
     - GlowstickPurple
@@ -128,7 +126,6 @@
     - PlushieXeno
     # Begin DeltaV - see Resources/Prototypes/_DV/Entities/Objects/Fun/toys.yml
     - PlushieMort
-    - PlushieIPC
     - PlushieFelinid
     - PlushieOni
     - PlushieHarpy

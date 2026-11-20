@@ -126,6 +126,7 @@
   recipeUnlocks:
   - WeaponEnergyGunPistol
   - WeaponRifleLaser
+  - MagazineLaser
 
 - type: technology
   id: IncendiaryLaserWeapons
@@ -150,19 +151,7 @@
   cost: 12500
   recipeUnlocks:
   - AdvancedTruncheon
+  - HardlightHatchet
   - TelescopicShield
   - BorgModuleSecurityEscalate
   - BorgModuleSecurityBastion
-
-- type: technology
-  id: OffensivePsionicProsthetics
-  name: research-technology-offensive-psionic-prosthetics
-  icon:
-    sprite: _DV/Interface/Actions/actions_psionics.rsi
-    state: pyrokinesis
-  discipline: Arsenal
-  tier: 2
-  cost: 12500
-  recipeUnlocks:
-  - PyroLeftArm
-  - ZapLeftArm

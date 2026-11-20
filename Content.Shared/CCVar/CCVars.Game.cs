@@ -287,7 +287,7 @@ public sealed partial class CCVars
     /// How long to store results in the cache before they must be retrieved again in days.
     /// </summary>
     public static readonly CVarDef<TimeSpan> GameIPIntelCacheLength =
-        CVarDef.Create("game.ipintel_cache_length", TimeSpan.FromDays(7), CVar.SERVERONLY);
+        CVarDef.Create("game.ipintel_cache_length", TimeSpan.FromDays(14), CVar.SERVERONLY);
 
     /// <summary>
     /// Amount of playtime in minutes to be exempt from an IP check. 0 to search everyone. 5 hours by default.
@@ -296,7 +296,7 @@ public sealed partial class CCVars
     /// Trust me you want one.
     /// </remarks>
     public static readonly CVarDef<TimeSpan> GameIPIntelExemptPlaytime =
-        CVarDef.Create("game.ipintel_exempt_playtime", TimeSpan.FromMinutes(300), CVar.SERVERONLY);
+        CVarDef.Create("game.ipintel_exempt_playtime", TimeSpan.Zero, CVar.SERVERONLY);
 
     /// <summary>
     /// Rating to reject at. Anything equal to or higher than this will reject the connection.
@@ -409,4 +409,13 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> GameHostnameInTitlebar =
         CVarDef.Create("game.hostname_in_titlebar", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// The maximum amount of tiles you can stack on top of each other. 0 is unlimited.
+    /// </summary>
+    /// <remarks>
+    /// Having it too high can result in "doomstacking" tiles - this messes with efficiency of explosions, deconstruction of tiles, and might result in memory problems.
+    /// </remarks>
+    public static readonly CVarDef<int> TileStackLimit =
+        CVarDef.Create("game.tile_stack_limit", 5, CVar.SERVER | CVar.REPLICATED);
 }

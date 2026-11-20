@@ -175,7 +175,7 @@ public sealed class PaperSystem : EntitySystem
 
     private void OnInputTextMessage(Entity<PaperComponent> entity, ref PaperInputTextMessage args)
     {
-        var ev = new PaperWriteAttemptEvent(entity.Owner);
+        var ev = new PaperWriteAttemptEvent(entity.Owner, IsSavingText: true); // DeltaV - Allow to differentiate between opening paper and saving text.
         RaiseLocalEvent(args.Actor, ref ev);
 
         if (ev.Cancelled)
@@ -276,7 +276,7 @@ public sealed class PaperSystem : EntitySystem
         _appearance.SetData(entity, PaperVisuals.Status, status, appearance);
     }
 
-    private void UpdateUserInterface(Entity<PaperComponent> entity)
+    public void UpdateUserInterface(Entity<PaperComponent> entity) // DeltaV - station AI
     {
         _uiSystem.SetUiState(entity.Owner, PaperUiKey.Key, new PaperBoundUserInterfaceState(entity.Comp.Content, entity.Comp.StampedBy, entity.Comp.Mode));
     }
@@ -293,7 +293,7 @@ public record struct PaperWriteEvent(EntityUid User, EntityUid Paper);
 /// </summary>
 /// <param name="Paper">The paper that the writing will take place on.</param>
 [ByRefEvent]
-public record struct PaperWriteAttemptEvent(EntityUid Paper, string? FailReason = null, bool Cancelled = false);
+public record struct PaperWriteAttemptEvent(EntityUid Paper, string? FailReason = null, bool Cancelled = false, bool IsSavingText = false); // DeltaV - Allow to differentiate between opening paper and saving text.
 
 /// <summary>
 /// Event raised on paper after it was written on by someone.

@@ -283,6 +283,7 @@
     allowedFlags:
       - Hide
       - HideLabel
+    hideOnInit: true
   - type: ActivatableUI
     key: enum.IFFConsoleUiKey.Key
   - type: UserInterface
@@ -482,7 +483,7 @@
   - type: CrewMonitoringConsole
   - type: DeviceNetwork
     deviceNetId: Wireless
-    receiveFrequencyId: CrewMonitor
+    receiveFrequencyId: NTNet # DeltaV - NTNet
   - type: WirelessNetworkConnection
     range: 1200
 
@@ -527,7 +528,10 @@
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
   - type: Computer
     board: ResearchComputerCircuitboard
   - type: AccessReader
@@ -578,7 +582,10 @@
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
   - type: Computer
     board: AnalysisComputerCircuitboard
   - type: PointLight
@@ -661,8 +668,6 @@
   name: body scanner computer
   description: A body scanner.
   components:
-  - type: ApcPowerReceiver
-    powerLoad: 500
   - type: Computer
     board: BodyScannerComputerCircuitboard
   - type: PointLight
@@ -690,17 +695,23 @@
       state: generic_panel_open
   - type: AccessReader
     access: [[ "Command" ]]
-  - type: CommunicationsConsole
-    title: comms-console-announcement-title-station
+  # Begin DeltaV - DV Comms Console
+  # - type: CommunicationsConsole
+  #   title: comms-console-announcement-title-station
+  - type: ActivatableUIRequiresAccess
+  - type: DVCommunicationsConsole # DeltaV - new functionality
+    announcementTitle: comms-console-announcement-title-station
+  # End DeltaV
   - type: DeviceNetwork
     deviceNetId: Wireless
-    transmitFrequencyId: ShuttleTimer
+    transmitFrequencyId: NTNet # DeltaV - DVComms console
+    receiveFrequencyId: NTNet # DeltaV - DVComms console
   - type: ActivatableUI
-    key: enum.CommunicationsConsoleUiKey.Key
+    key: enum.DVCommunicationsConsoleUi.Key # DeltaV - new UI
   - type: UserInterface
     interfaces:
-      enum.CommunicationsConsoleUiKey.Key:
-        type: CommunicationsConsoleBoundUserInterface
+      enum.DVCommunicationsConsoleUi.Key: # DeltaV - new UI
+        type: DVCommunicationsConsoleBoundUserInterface
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: Computer
@@ -736,13 +747,25 @@
       state: generic_panel_open
   - type: AccessReader
     access: [[ "NuclearOperative" ]]
-  - type: CommunicationsConsole
-    title: comms-console-announcement-title-unauthorized # DeltaV
-    color: "#ff0000"
-    canShuttle: false
-    global: true #announce to everyone they're about to fuck shit up
-    sound: /Audio/Announcements/intercept.ogg # DeltaV
-    announceSentBy: false # The title already says who they are.
+  # Begin DeltaV Changes
+  # - type: CommunicationsConsole
+  #   title: comms-console-announcement-title-unauthorized # DeltaV
+  #   color: "#ff0000"
+  #   canShuttle: false
+  #   global: true #announce to everyone they're about to fuck shit up
+  #   sound: /Audio/Announcements/intercept.ogg # DeltaV
+  #   announceSentBy: false # The title already says who they are.
+  - type: DVCommunicationsConsole
+    announcementTitle: comms-console-announcement-title-unauthorized
+    announcementColor: "#ff0000"
+    announcementSound:
+      path: /Audio/Announcements/intercept.ogg
+    canAlertLevel: false
+    canCallShuttles: false
+    canConfigureScreens: false
+    canKeycardAuthenticationDevice: false
+    globalAnnouncements: true
+  # End DeltaV Changes
   - type: Computer
     board: SyndicateCommsComputerCircuitboard
   - type: PointLight
@@ -770,13 +793,23 @@
       state: generic_panel_open
   - type: AccessReader
     access: [[ "Wizard" ]]
-  - type: CommunicationsConsole
-    title: comms-console-announcement-title-wizard
-    color: "#ff00ff"
-    canShuttle: false
-    global: true #announce to everyone they're about to fuck shit up
-    announceSentBy: false
-    sound: /Audio/Announcements/announce.ogg # DeltaV - changed from war.oog to announce.ogg
+  # Begin DeltaV Changes
+  # - type: CommunicationsConsole
+  #   title: comms-console-announcement-title-wizard
+  #   color: "#ff00ff"
+  #   canShuttle: false
+  #   global: true #announce to everyone they're about to fuck shit up
+  #   announceSentBy: false
+  #   sound: /Audio/Announcements/announce.ogg # DeltaV - changed from war.oog to announce.ogg
+  - type: DVCommunicationsConsole
+    announcementTitle: comms-console-announcement-title-wizard
+    announcementColor: "#ff00ff"
+    canAlertLevel: false
+    canCallShuttles: false
+    canConfigureScreens: false
+    canKeycardAuthenticationDevice: false
+    globalAnnouncements: true
+  # End DeltaV Changes
   - type: Computer
     board: WizardCommsComputerCircuitboard
   - type: PointLight
@@ -804,11 +837,21 @@
       state: generic_panel_open
   - type: AccessReader
     access: [[ "CentralCommand" ]]
-  - type: CommunicationsConsole
-    title: comms-console-announcement-title-centcom
-    color: "#1d8bad"
-    canShuttle: false
-    global: true
+  # Begin DeltaV Changes
+  # - type: CommunicationsConsole
+  #   title: comms-console-announcement-title-centcom
+  #   color: "#1d8bad"
+  #   canShuttle: false
+  #   global: true
+  - type: DVCommunicationsConsole
+    announcementTitle: comms-console-announcement-title-centcom
+    announcementColor: "#1d8bad"
+    canAlertLevel: false
+    canCallShuttles: false
+    canConfigureScreens: false
+    canKeycardAuthenticationDevice: false
+    globalAnnouncements: true
+  # End DeltaV Changes
   - type: Computer
     board: CentcommCommsComputerCircuitboard
   - type: PointLight
@@ -1010,7 +1053,7 @@
 - type: entity
   id: ComputerCargoOrdersScience
   parent: ComputerCargoOrders
-  name: science request computer
+  name: epistemics request computer # DeltaV - Epistemics Department replacing Science
   description: Used by the science department to order supplies.
   components:
   - type: Sprite
@@ -1053,6 +1096,7 @@
     - map: ["computerLayerKeyboard"]
       state: generic_keyboard
     - map: ["computerLayerScreen"]
+      sprite: _DV/Structures/Machines/computers.rsi # DeltaV - Blue Security Resprit
       state: request-sec
     - map: ["computerLayerKeys"]
       state: generic_keys
@@ -1069,7 +1113,7 @@
   - type: Computer
     board: CargoRequestSecurityComputerCircuitboard
   - type: PointLight
-    color: "#d11d00"
+    color: "#014fe0" # DeltaV - Blue Security Resprite, was "#d11d00"
   - type: AccessReader
     access: [["Security"]]
 
@@ -1205,8 +1249,6 @@
       state: generic_keys
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
-  - type: ApcPowerReceiver
-    powerLoad: 3100 #We want this to fail first so I transferred most of the scanner and pod's power here. (3500 in total)
   - type: Computer
     board: CloningConsoleComputerCircuitboard
   - type: PointLight
@@ -1576,7 +1618,11 @@
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 5
+  - type: PowerState
+    idlePowerDraw: 5
+    workingPowerDraw: 1000
+  - type: UIPowerState
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: RoboticsConsole
@@ -1621,7 +1667,10 @@
     channels:
     - Xenoborg
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: Mothership
@@ -1648,11 +1697,14 @@
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
   - type: Computer
     board: StationAiUploadCircuitboard
   - type: AccessReader
-    access: [ [ "ResearchDirector" ] ]
+    access: [ [ "ResearchDirector" ], ["ChiefEngineer" ] ] # DeltaV - added chief engineer
   - type: Lock
     unlockOnClick: false
   - type: SiliconLawUpdater
@@ -1724,7 +1776,10 @@
           True: { visible: false }
           False: { visible: true }
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
   - type: Computer
     board: StationAiFixerCircuitboard
   - type: AccessReader
@@ -1759,3 +1814,41 @@
         type: StationAiFixerConsoleBoundUserInterface
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerNukieDelivery
+  name: syndicate delivery computer
+  description: "A computer that can bluespace in certain equipment for Nuclear Operations. \nThe circuitboard is integrated into the frame and can't be recovered if deconstructed."
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: request-syndie
+    - map: ["computerLayerKeys"]
+      state: syndie_generic_keys
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      state: generic_panel_open
+  # - type: Computer
+  #   board: SyndicateCommsComputerCircuitboard
+  - type: Anchorable
+    flags:
+    - Anchorable # No taking the console along!
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#f71713"
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    name: store-preset-name-nukie-delivery
+    categories:
+    - NukieDelivery

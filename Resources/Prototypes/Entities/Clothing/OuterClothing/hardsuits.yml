@@ -436,6 +436,8 @@
         Heat: 0.5
         Radiation: 0.5
         Caustic: 0.6
+        Holy: 0.8 #DeltaV
+        Soul: 0.8 #DeltaV
   - type: DamageOnShootProtection # imp
     slots: OUTERCLOTHING
     damageProtection:
@@ -507,6 +509,8 @@
     - Hardsuit
     - WhitelistChameleon
     - HidesHarpyWings # DeltaV: Used by harpies to help render their hardsuit sprites
+  - type: StealTarget
+    stealGroup: ClothingOuterHardsuitEngineeringWhite #DeltaV - added traitor steal objective
   # imp edits #
   - type: SupermatterImmune
   - type: ClothingGrantComponent
@@ -583,7 +587,7 @@
         Radiation: 0.1
         Caustic: 0.2
         Holy: 0.7 # DeltaV
-        Shadow: 0.7 # DeltaV
+        Soul: 0.7 # DeltaV
   - type: DamageOnShootProtection # imp
     slots: OUTERCLOTHING
     damageProtection:
@@ -964,7 +968,7 @@
   - type: ExplosionResistance
     damageCoefficient: 0.3
   - type: StaminaResistance # DeltaV
-    damageCoefficient: 0.1
+    damageCoefficient: 0.8
   - type: Armor
     modifiers:
       coefficients:
@@ -975,6 +979,7 @@
         Radiation: 0.2
         Caustic: 0.2
         Cold: 0.6 # DeltaV - Cold res
+    staminaMeleeDamageCoefficient: 0.8 # DeltaV - Reduced Melee Stamina Resistance
   - type: DamageOnShootProtection # imp
     slots: OUTERCLOTHING
     damageProtection:
@@ -1078,6 +1083,8 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitLing
+  - type: Tag # DeltaV - Removed from Chameleon Whitelist
+    tags: []
   - type: MappingCategories # DeltaV
     categories:
     - Changeling
@@ -1190,7 +1197,7 @@
 
 #ERT Engineer Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitCBURN
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieElite ]
   id: ClothingOuterHardsuitERTEngineer
   categories: [ HideSpawnMenu ] # Delta V - We have our own we use for ERT
   name: ERT engineer's hardsuit
@@ -1242,7 +1249,7 @@
 
 #ERT Janitor Hardsuit
 - type: entity
-  parent: ClothingOuterHardsuitCBURN
+  parent: [ BaseCentcommContraband, ClothingOuterHardsuitSyndieElite ]
   id: ClothingOuterHardsuitERTJanitor
   categories: [ HideSpawnMenu ] # Delta V - We have our own we use for ERT
   name: ERT janitor's hardsuit
@@ -1310,6 +1317,8 @@
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDeathsquad
+  - type: Tag # DeltaV - Deathsquad isn't real, it can't hurt you.
+    tags: []
 
 #CBURN Hardsuit
 - type: entity

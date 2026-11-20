@@ -83,8 +83,8 @@
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
-  id: MagazineBoxSpecialMindbreaker
-  result: MagazineBoxSpecialMindbreaker
+  id: MagazineBoxSpecialLernaea
+  result: MagazineBoxSpecialLernaea
   materials:
     Plastic: 1250
     Steel: 75
@@ -169,7 +169,7 @@
   id: MagazineBoxMagnumRubber
   result: MagazineBoxMagnumRubber
   materials:
-    Plastic: 240
+    Plastic: 480
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
@@ -287,6 +287,26 @@
     Steel: 300
     Cloth: 200
 
+# Masks
+
+- type: latheRecipe #Sec Gas Masks and Breath Masks are craftable.
+  id: ClothingMaskGasSecurityDV
+  result: ClothingMaskGasSecurityDV
+  completetime: 2
+  materials:
+    Steel: 500
+    Cloth: 100
+    Plastic: 250
+
+- type: latheRecipe
+  id: ClothingMaskGasSecurity
+  result: ClothingMaskGasSecurity
+  completetime: 1
+  materials:
+    Steel: 250
+    Cloth: 50
+    Plastic: 125
+
 # Weapons
 
 - type: latheRecipe
@@ -323,13 +343,23 @@
   result: ClothingShoesBootsSecurityMagboots
 
 - type: latheRecipe
-  parent: BaseWeaponRecipe
+  parent: BaseWeaponRecipeMelee
   id: AdvancedTruncheon
   result: AdvancedTruncheon
   completetime: 5
   materials:
     Steel: 1000
     Plastic: 800
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeMelee
+  id: HardlightHatchet
+  result: HardlightHatchet
+  materials:
+    Steel: 600
+    Glass: 500
+    Plastic: 400
+    Gold: 250
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -351,18 +381,6 @@
     Plastic: 500
     Gold: 250
     Plasma: 500
-
-- type: latheRecipe
-  parent: BaseAmmoRecipe
-  id: GamblagatorCapacitor
-  result: GamblagatorCapacitor
-  materials:
-    Steel: 400
-    Glass: 200
-    Plastic: 200
-    Gold: 200
-    Plasma: 500
-    Bluespace: 100
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
@@ -391,6 +409,7 @@
     Glass: 1200
     Gold: 500
     Silver: 500
+    Uranium: 500
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -421,26 +440,15 @@
     Steel: 1000
     Uranium: 250
 
-- type: latheRecipe
-  id: PyroLeftArm
-  result: PyroLeftArm
-  categories:
-  - Robotics
-  completetime: 5
-  materials:
-    Steel: 1500
-    Silver: 100
-    Plasma: 500
-    Bluespace: 300
+# Crafting base component for Unstable Core Refractor
 
 - type: latheRecipe
-  id: ZapLeftArm
-  result: ZapLeftArm
-  categories:
-  - Robotics
-  completetime: 5
+  parent: BaseWeaponRecipeLong
+  id: UnstableReactorHousing
+  result: UnstableReactorHousing
   materials:
-    Steel: 1500
-    Silver: 100
-    Plasma: 500
-    Bluespace: 300
+    Steel: 4500
+    Glass: 1500
+    Gold: 1500
+    Silver: 3000
+    Uranium: 1000

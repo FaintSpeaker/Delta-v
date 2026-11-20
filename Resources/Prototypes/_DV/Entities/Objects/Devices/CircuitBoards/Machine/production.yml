@@ -86,3 +86,31 @@
     prototype: EpistemicsTechFab
   - type: StealTarget
     stealGroup: EpistemicsTechFabCircuitboard
+
+- type: entity
+  parent: BaseTechFabCircuitboardDV
+  id: JusticeTechFabCircuitboard
+  name: justice techfab machine board
+  description: A machine printed circuit board for a justice techfab.
+  components:
+  - type: Sprite
+    state: security # TODO: Actually sprite a proper board color for Justice
+  - type: MachineBoard
+    prototype: JusticeTechFab
+  - type: StealTarget
+    stealGroup: JusticeTechFabCircuitboard
+
+# Kitchen Freezer
+- type: entity
+  id: KitchenFreezerMachineCircuitBoard
+  parent: BaseMachineCircuitboard
+  name: kitchen freezer thermomachine machine board
+  description: Used to make a kitchen freezer thermomachine.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: GasThermoMachineKitchenFreezer
+    stackRequirements:
+      Manipulator: 4
+      Cable: 5

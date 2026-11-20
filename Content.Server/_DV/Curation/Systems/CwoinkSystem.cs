@@ -256,7 +256,7 @@ public sealed partial class CwoinkSystem : SharedCwoinkSystem
             }
 
             // Check if the user has been banned
-            var ban = await _dbManager.GetServerBanAsync(null, e.Session.UserId, null, null);
+            var ban = await _dbManager.GetBanAsync(null, e.Session.UserId, null, null);
             if (ban != null)
             {
                 _activeConversations.Remove(e.Session.UserId);
@@ -873,7 +873,7 @@ public sealed partial class CwoinkSystem : SharedCwoinkSystem
         if (parameters.RoundTime != string.Empty && parameters.RoundState == GameRunLevel.InRound)
             stringbuilder.Append($" **{parameters.RoundTime}**");
         if (!parameters.PlayedSound)
-            stringbuilder.Append($" **{(parameters.CuratorOnly ? Loc.GetString("cwoink-message-admin-only") : Loc.GetString("cwoink-message-silent"))}**");
+            stringbuilder.Append($" **{(parameters.CuratorOnly ? Loc.GetString("cwoink-message-curator-only") : Loc.GetString("cwoink-message-silent"))}**");
 
         if (parameters.IsDiscord) // Frontier - Discord Indicator
             stringbuilder.Append($" **{discordReplyPrefix}**");
