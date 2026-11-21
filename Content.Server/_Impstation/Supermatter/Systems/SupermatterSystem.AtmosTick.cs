@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.Atmos.Piping.Components;
 using Content.Shared._Impstation.Supermatter.Components;
 using Content.Shared._Impstation.CCVar;
 using Content.Shared.Atmos;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Radiation.Components;
 using Robust.Shared.Map.Components;
 
@@ -19,21 +19,21 @@ public sealed partial class SupermatterSystem
     private void InitializeAtmosTick()
     {
         _radiationSourceQuery = GetEntityQuery<RadiationSourceComponent>();
-        
+
         SubscribeLocalEvent<SupermatterComponent, AtmosDeviceUpdateEvent>(OnAtmosDeviceUpdate);
     }
-    
+
     private void OnAtmosDeviceUpdate(Entity<SupermatterComponent> ent, ref AtmosDeviceUpdateEvent args)
     {
         var mix = _atmosphere.GetContainingMixture(ent.Owner, true, true);
-        
+
         ProcessAtmos(ent, mix, args.dt);
-        
+
         HandleDamage(ent, mix);
         DirtyFields(ent, ent.Comp, MetaData(ent), nameof(SupermatterComponent.Damage), nameof(SupermatterComponent.DamageArchived));
-        
+
         UpdateSupermatterStatus(ent);
-        
+
         if (_lightQuery.TryComp(ent, out var light))
             UpdateLight(ent, light);
 
@@ -63,10 +63,10 @@ public sealed partial class SupermatterSystem
         ent.Comp.GasStorage = mix.RemoveRatio(gasEfficiency); // Delta-V - Use RemoveRatio instead of Remove.
         // Delta-V - Use RemoveRatio instead of Remove.
         ent.Comp.GasStorage = mix.RemoveRatio(gasEfficiency);
-        
+
         // TotalMoles actually does a horizontal add so we can just store that value instead of recalculating it 5+ times
         var absorbedMoles = ent.Comp.GasStorage.TotalMoles;
-        
+
         if (ent.Comp.GasVoidProportion > 0f)
         {
             // Get the number of moles to remove based on the absorbed moles, and remove it from the mix
@@ -134,7 +134,7 @@ public sealed partial class SupermatterSystem
 
         // If there is more frezon and N2 than anything else, we receive no power increase from heat
         ent.Comp.Power += ent.Comp.GasStorage.Temperature * tempFactor / Atmospherics.T0C * powerRatio;
-        
+
         ProcessRadiation(ent, gasComposition);
 
         // Affects plasma, o2 and heat output.
@@ -167,7 +167,7 @@ public sealed partial class SupermatterSystem
         var gasReleased = sm.GasStorage.Clone();
         var wasteModifier = Math.Max(sm.GasWasteModifier, sm.GasWasteModifierMinimum);
         var maxWasteTemperature = 2500f * wasteModifier;
-        
+
         // Psychological soothing can reduce the energy used for waste gasses and temperatures by up to 20%.
         var soothingFactor = 1f;
         if(PsyReceiversQuery.TryComp(uid, out var psyReceiver))
@@ -193,7 +193,7 @@ public sealed partial class SupermatterSystem
         gasReleased.AdjustMoles(
             Gas.Oxygen,
             Math.Max((energy + gasReleased.Temperature * wasteModifier - Atmospherics.T0C) / Config.GetCVar(ImpCCVars.SupermatterOxygenReleaseModifier), 0f));
-        
+
         // Release the waste
         _atmosphere.Merge(mix, gasReleased);
     }
@@ -283,7 +283,7 @@ public sealed partial class SupermatterSystem
         if (moles < Config.GetCVar(ImpCCVars.SupermatterMolePenaltyThreshold))
         {
             // Only has a net positive effect when the temp is below 313.15, heals up to 2 damage.
-            // Psychologists increase this temp min by up to 45 
+            // Psychologists increase this temp min by up to 45
             var soothingValue = 0f;
 
             if(PsyReceiversQuery.TryComp(ent, out var psyReceiver))

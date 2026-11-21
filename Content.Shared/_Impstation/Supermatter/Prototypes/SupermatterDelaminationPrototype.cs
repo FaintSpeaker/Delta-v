@@ -10,20 +10,20 @@ namespace Content.Shared._Impstation.Supermatter.Prototypes;
 /// This is a prototype for Supermatter Delaminations
 /// </summary>
 [Prototype]
-public sealed class SupermatterDelaminationPrototype : IPrototype, IInheritingPrototype
+public sealed partial class SupermatterDelaminationPrototype : IPrototype, IInheritingPrototype
 {
     /// <inheritdoc/>
     [IdDataField]
-    public string ID { get; } = default!;
+    public string ID { get; private set; } = default!;
 
     /// <inheritdoc/>
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<SupermatterDelaminationPrototype>))]
-    public string[]? Parents { get; }
+    public string[]? Parents { get; private set; }
 
     /// <inheritdoc/>
     [NeverPushInheritance]
     [AbstractDataField]
-    public bool Abstract { get; }
+    public bool Abstract { get; private set; }
 
     /// <summary>
     /// The requirements for this delamination to occur. All non-null requirements must be met for this delamination to be valid.
@@ -36,13 +36,13 @@ public sealed class SupermatterDelaminationPrototype : IPrototype, IInheritingPr
     /// </summary>
     [DataField][AlwaysPushInheritance]
     public EntProtoId[] GameRules = [];
-    
+
     /// <summary>
     /// The effects that will be applied to the supermatter entity when this delamination occurs.
     /// </summary>
     [DataField][AlwaysPushInheritance]
     public EntityEffect[] SupermatterEffects = [];
-    
+
     /// <summary>
     /// The effects that will be applied to mobs on the same map as the supermatter entity when this delamination occurs.
     /// </summary>
@@ -64,37 +64,37 @@ public readonly partial record struct SupermatterDelaminationRequirements
     /// </summary>
     [DataField]
     public float? MinPower { get; init; }
-    
+
     /// <summary>
     /// The maximum power required for this delamination to occur. If null, there is no maximum.
     /// </summary>
     [DataField]
     public float? MaxPower { get; init; }
-    
+
     /// <summary>
     /// The minimum moles of absorbed gas required for this delamination to occur. If null, there is no minimum.
     /// </summary>
     [DataField]
     public float? MinMoles { get; init; }
-    
+
     /// <summary>
     /// The maximum moles of absorbed gas required for this delamination to occur. If null, there is no maximum.
     /// </summary>
     [DataField]
     public float? MaxMoles { get; init; }
-    
+
     /// <summary>
     /// The minimum glimmer required for this delamination to occur. If null, there is no minimum.
     /// </summary>
     [DataField]
     public float? MinGlimmer { get; init; }
-    
+
     /// <summary>
     /// The maximum glimmer required for this delamination to occur. If null, there is no maximum.
     /// </summary>
     [DataField]
     public float? MaxGlimmer { get; init; }
-    
+
     /// <summary>
     /// The minimum moles of each gas required for this delamination to occur. If null, there is no minimum.
     /// </summary>
