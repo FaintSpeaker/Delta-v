@@ -1,5 +1,6 @@
 using Content.Server._DV.StationEvents.Components;
 using Content.Server.Light.EntitySystems;
+using Content.Server.StationEvents.Components;
 using Content.Server.StationEvents.Events;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Light.Components;
@@ -28,6 +29,12 @@ public sealed class FlickeringLightsRule : StationEventSystem<FlickeringLightsRu
     {
         base.Started(uid, component, gameRule, args);
 
+        if (!TryComp<StationEventComponent>(uid, out var stationEvent) || stationEvent is not { EndTime: var endTime })
+        {
+            // Something is wrong with this station event, so bail out just to be safe.
+            return;
+        }
+
         // Whatever starts the rule may have set the station before starting the game rule
         // If that's the case, we shouldn't randomly choose a station.
         if (!component.AffectedStation.HasValue)
@@ -53,47 +60,28 @@ public sealed class FlickeringLightsRule : StationEventSystem<FlickeringLightsRu
         var mapId = Transform(grid.Value).MapID;
 
         var lightLookup = new HashSet<Entity<PoweredLightComponent>>();
-        _entityLookup.GetEntitiesOnMap<PoweredLightComponent>(mapId, lightLookup);
+        _entityLookup.GetEntitiesOnMap(mapId, lightLookup);
 
         foreach (var light in lightLookup)
         {
-            // We do not want to affect lights that are already blinking
-            // It might be caused by ghosts or the variation pass, or otherwise is not controlled by us.
-            if (light.Comp.IsBlinking)
-                continue;
-
             if(Transform(light).MapID != mapId)
                 continue;
 
             if (!_random.Prob(component.LightFlickerChance))
                 continue;
 
+            var blinking = EnsureComp<BlinkingPoweredLightComponent>(light.Owner);
 
-            component.AffectedEntities.Add(light.Owner, !light.Comp.IgnoreGhostsBoo);
-
-            _lightSystem.ToggleBlinkingLight(light, light, true);
-
-            // Prevent ghosts from playing with the lights during this time.
-            if(!light.Comp.IgnoreGhostsBoo)
-                _lightSystem.ToggleIgnoreGhostBoo(light, light, true);
-        }
-    }
-
-    protected override void Ended(EntityUid uid, FlickeringLightsRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
-    {
-        base.Ended(uid, component, gameRule, args);
-
-        foreach (var (light, shouldResetIgnore) in component.AffectedEntities)
-        {
-            if(!_lightQuery.TryComp(light, out var lightComp))
+            // Skip always blinking lights
+            if (blinking.StopBlinkingTime is null)
                 continue;
 
-            _lightSystem.ToggleBlinkingLight(light, lightComp, false);
+            // Skip lights that should blink for longer
+            if (blinking.StopBlinkingTime > endTime)
+                continue;
 
-            if(shouldResetIgnore)
-                _lightSystem.ToggleIgnoreGhostBoo(light, lightComp, false);
+            blinking.StopBlinkingTime = endTime;
+            Dirty(light, blinking);
         }
-
-        component.AffectedEntities.Clear();
     }
 }
