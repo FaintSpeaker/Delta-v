@@ -14,8 +14,10 @@
       state: generic_keyboard
     - map: ["computerLayerScreen"]
       state: supermatter-0
+      sprite: _Impstation/Structures/Machines/computers.rsi
     - map: ["computerLayerKeys"]
       state: supermatter_keys
+      sprite: _Impstation/Structures/Machines/computers.rsi
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
   - type: PointLight
