@@ -85,7 +85,7 @@ public sealed partial class SupermatterLightningComponent : Component
     public SortedDictionary<float, SupermatterLightningPowerThreshold> PowerThresholds;
 }
 
-[DataDefinition] [Serializable] [NetSerializable]
+[DataDefinition] [Serializable]
 public partial record struct SupermatterLightningPowerThreshold
 {
     /// <summary>
@@ -107,7 +107,7 @@ public partial record struct SupermatterLightningPowerThreshold
     public EntProtoId? LightningPrototype;
 }
 
-[DataDefinition] [Serializable] [NetSerializable]
+[DataDefinition] [Serializable]
 public partial record struct SupermatterLightningDamageThreshold
 {
     /// <summary>
